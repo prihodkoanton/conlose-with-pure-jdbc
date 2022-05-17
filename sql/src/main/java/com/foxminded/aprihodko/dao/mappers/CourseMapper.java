@@ -6,12 +6,13 @@ import java.sql.SQLException;
 import com.foxminded.aprihodko.model.Course;
 import static com.foxminded.aprihodko.model.Course.COURSE_ID;
 import static com.foxminded.aprihodko.model.Course.COURSE_NAME;
+import static com.foxminded.aprihodko.model.Course.COURSE_DESCRIPTION;
 
 public class CourseMapper implements Mapper<Course>{
 
    @Override
    public Course apply(ResultSet rSet) throws SQLException {
-      return new Course(rSet.getLong(COURSE_ID), rSet.getString(COURSE_NAME));
+      return new Course(rSet.getLong(COURSE_ID), rSet.getString(COURSE_NAME), rSet.getString(COURSE_DESCRIPTION));
    }
 
 }
