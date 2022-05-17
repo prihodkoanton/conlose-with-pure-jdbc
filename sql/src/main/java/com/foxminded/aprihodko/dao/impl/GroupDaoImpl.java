@@ -59,7 +59,7 @@ public class GroupDaoImpl extends AbstractCrudDao<Group, Long> implements GroupD
       try (PreparedStatement ps = connection.prepareStatement(DELETE_ONE)) {
          ps.setLong(1, id);
          if (ps.executeUpdate() != 1) {
-            throw new SQLException("Unable to delete group(id = " + id + ")");
+            throw new SQLException("Unable to delete group (id = " + id + ")");
          }
       }
    }
