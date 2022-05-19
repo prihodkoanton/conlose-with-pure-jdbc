@@ -42,7 +42,7 @@ public class GenerateCourses {
    
    public void generateDate(Connection connection, int courseCount) throws SQLException {
       if (courseCount > 10) {
-         throw new IllegalArgumentException("Count of Course must be less then 10");
+         throw new IllegalArgumentException("Count of Course must be less then 11");
       }
       generateCourse(connection, courseCount);
    }

@@ -1,7 +1,9 @@
-CREATE TABLE IF NOT EXISTS school.courses
+DROP TABLE IF exists school.courses;
+
+CREATE TABLE school.courses
 (
    course_id bigserial NOT NULL,
    course_name text COLLATE pg_catalog."default" NOT NULL,
    course_description text COLLATE pg_catalog."default" NOT NULL
-)
+);
 

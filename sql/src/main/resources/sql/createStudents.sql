@@ -1,3 +1,5 @@
+drop table if exists school.students;
+
 CREATE TABLE IF NOT EXISTS school.students
 (
     student_id bigserial NOT NULL,

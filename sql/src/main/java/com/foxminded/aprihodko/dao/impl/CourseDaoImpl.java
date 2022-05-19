@@ -1,9 +1,6 @@
 package com.foxminded.aprihodko.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +14,9 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
    public static final String SELECT_ONE = "SELECT * FROM school.courses where course_id = ?";
    public static final String FIND_BY_NAME = "SELECT * FROM school.courses where course_name = ?";
    public static final String SELECT_ALL = "SELECT * FROM school.courses";
-   public static final String INSERT_ONE = "INSERT INTO school.courses(course_id, course_name, courses_description) VALUES (?, ?, ?)";
-   public static final String UPDATE = "UPDATE school.course SET course_name = ?, courses_description = ? where course_id = ?";
-   public static final String DELETE_ONE = "DELETE FROM school.course WHERE course_id = ?";
+   public static final String INSERT_ONE = "INSERT INTO school.courses(course_name, course_description) VALUES (?, ?)";
+   public static final String UPDATE = "UPDATE school.courses SET course_name = ?, courses_description = ? where course_id = ?";
+   public static final String DELETE_ONE = "DELETE FROM school.courses WHERE course_id = ?";
    
    private CourseMapper mapper;
    
@@ -80,9 +77,9 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
 
    @Override
    protected Course create(Connection connection, Course entity) throws SQLException {
-      try(PreparedStatement ps = connection.prepareStatement(INSERT_ONE)){
-         ps.setLong(1, entity.getId());
-         ps.setString(2, entity.getName());
+      try(PreparedStatement ps = connection.prepareStatement(INSERT_ONE, Statement.RETURN_GENERATED_KEYS)){
+         ps.setString(1, entity.getName());
+         ps.setString(2, entity.getDescription());
          if (ps.executeUpdate() != 1) {
             throw new SQLException("Unable to create course " + entity);
          }
