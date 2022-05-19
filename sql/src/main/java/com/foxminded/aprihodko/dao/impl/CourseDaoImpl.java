@@ -91,7 +91,7 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
                throw new SQLException("Unable to retrieve id");
             }
             Long id = rs.getLong(1);
-            return new Course(entity.getId(), entity.getName(), entity.getDescription());
+            return new Course(id, entity.getName(), entity.getDescription());
          }
       }
    }

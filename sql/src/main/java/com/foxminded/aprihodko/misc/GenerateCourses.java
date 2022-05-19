@@ -11,7 +11,10 @@ import com.foxminded.aprihodko.model.Course;
 public class GenerateCourses {
    
    private final CourseDao courseDao;
-   private List<Course> courses;
+   
+   public GenerateCourses(CourseDao courseDao) {
+      this.courseDao = courseDao;
+   }
    private final List<String> nameOfCourse = new ArrayList<>() {{
       add("Math");
       add("Music");
@@ -20,7 +23,7 @@ public class GenerateCourses {
       add("Physics");
       add("English");
       add("Belarussian");
-      add("Ukarin");
+      add("Ukrainian");
       add("Java");
       add("Spring");
    }};
@@ -37,15 +40,14 @@ public class GenerateCourses {
       add("Framework to Java");
    }};
    
-   public GenerateCourses(CourseDao courseDao) {
-      this.courseDao = courseDao;
-   }
-   
-   public void generateDate(Connection connection, int groupCount) throws SQLException {
-      generateDate(connection, groupCount);
+   public void generateDate(Connection connection, int courseCount) throws SQLException {
+      if (courseCount > 10) {
+         throw new IllegalArgumentException("Count of Course must be less then 10");
+      }
+      generateCourse(connection, courseCount);
    }
 
-   private List<Course> generateGroups(Connection connection, int count) throws SQLException {
+   private List<Course> generateCourse(Connection connection, int count) throws SQLException {
       List<Course> result = new ArrayList<Course>();
       for (int i = 0; i < count; i++) {
          result.add(courseDao.save(connection, new Course(nameOfCourse.get(i), descriptionOfCourse.get(i))));

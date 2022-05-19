@@ -16,6 +16,9 @@ public class Students extends LongEntity{
       this.firstName = firstName;
       this.lastName = lastName;
    }
+   public Students(String firstName,String lastName) {
+      this(null, firstName, lastName);
+   }
 
    public String getFirstName() {
       return firstName;

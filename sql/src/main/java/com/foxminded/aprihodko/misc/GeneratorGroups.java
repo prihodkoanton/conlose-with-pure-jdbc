@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.foxminded.aprihodko.dao.GroupDao;
@@ -19,7 +20,7 @@ public class GeneratorGroups {
    }
 
    public void generateDate(Connection connection, int groupCount) throws SQLException {
-      generateDate(connection, groupCount);
+      generateGroups(connection, groupCount);
    }
 
    private List<Group> generateGroups(Connection connection, int count) throws SQLException {

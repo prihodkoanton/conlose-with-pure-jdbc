@@ -6,6 +6,8 @@ import java.sql.Statement;
 
 import com.foxminded.aprihodko.dao.datasource.Datasource;
 
+import static com.foxminded.aprihodko.utils.TransactionUtils.transaction;
+
 public class SqlUtils {
    public static void executeSqlScript(Connection connection, String sqlScript) throws SQLException {
       try (Statement statement = connection.createStatement()) {
