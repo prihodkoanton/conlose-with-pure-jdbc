@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class GroupDaoImpl extends AbstractCrudDao<Group, Long> implements GroupD
    public static final String SELECT_ONE = "SELECT * FROM school.groups where group_id = ?";
    public static final String FIND_BY_NAME = "SELECT * FROM school.groups where group_name = ?";
    public static final String SELECT_ALL = "SELECT * FROM school.groups";
-   public static final String INSERT_ONE = "INSERT INTO school.groups(group_id, group_name) VALUES (?, ?)";
+   public static final String INSERT_ONE = "INSERT INTO school.groups(group_name) VALUES (?)";
    public static final String UPDATE = "UPDATE school.groups SET group_name = ? where group_id = ?";
    public static final String DELETE_ONE = "DELETE FROM school.groups WHERE group_id = ?";
 
@@ -66,9 +67,8 @@ public class GroupDaoImpl extends AbstractCrudDao<Group, Long> implements GroupD
 
    @Override
    protected Group create(Connection connection, Group entity) throws SQLException {
-      try (PreparedStatement ps = connection.prepareStatement(INSERT_ONE)) {
-         ps.setLong(1, entity.getId());
-         ps.setString(2, entity.getName());
+      try (PreparedStatement ps = connection.prepareStatement(INSERT_ONE, Statement.RETURN_GENERATED_KEYS)) {
+         ps.setString(1, entity.getName());
          if (ps.executeUpdate() != 1) {
             throw new SQLException("Unable to create group " + entity);
          }

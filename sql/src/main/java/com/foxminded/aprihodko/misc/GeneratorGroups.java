@@ -24,19 +24,18 @@ public class GeneratorGroups {
    }
 
    private List<Group> generateGroups(Connection connection, int count) throws SQLException {
-      List<Group> result = new ArrayList<Group>();
+      List<Group> result = new ArrayList<>();
       for (int i = 0; i < count; i++) {
-         String groupName = generateGroupName();
-         result.add(groupDao.save(connection, new Group(groupName)));
+          String groupName = generateGroupName();
+          result.add(groupDao.save(connection, new Group(groupName)));
       }
       return result;
    }
 
    private String generateGroupName() {
-      String groupName = String
-            .valueOf(randomChar(alphabet) + randomChar(alphabet) + "-"
-            + ThreadLocalRandom.current().nextInt(10, 99));
-      return groupName;
+      String sb = String.valueOf(randomChar(alphabet)) + randomChar(alphabet) + "-" +
+            ThreadLocalRandom.current().nextInt(10, 99);
+    return sb;
    }
 
    private char randomChar(char[] array) {
