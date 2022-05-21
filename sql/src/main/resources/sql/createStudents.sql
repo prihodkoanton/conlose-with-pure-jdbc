@@ -1,4 +1,4 @@
-drop table if exists school.students;
+
 
 CREATE TABLE IF NOT EXISTS school.students
 (
@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS school.students
     first_name text COLLATE pg_catalog."default" NOT NULL,
     last_name text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT students_pkey PRIMARY KEY (group_id)
-)
+);
 
     
