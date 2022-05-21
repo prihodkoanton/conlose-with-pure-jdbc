@@ -4,5 +4,5 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface Mapper<T> {
-   T apply(ResultSet rSet) throws SQLException;
+    T apply(ResultSet rSet) throws SQLException;
 }
