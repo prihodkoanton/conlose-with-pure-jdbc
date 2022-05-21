@@ -1,62 +1,56 @@
 package com.foxminded.aprihodko;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Properties;
-
 import com.foxminded.aprihodko.dao.datasource.Datasource;
 import com.foxminded.aprihodko.dao.datasource.SimpleDatasorce;
 import com.foxminded.aprihodko.dao.impl.CourseDaoImpl;
-import com.foxminded.aprihodko.dao.impl.GroupDaoImpl;
-import com.foxminded.aprihodko.dao.impl.StudentsDaoImpl;
 import com.foxminded.aprihodko.misc.GenerateCourses;
-import com.foxminded.aprihodko.misc.GenerateStudents;
-import com.foxminded.aprihodko.misc.GeneratorGroups;
+import com.foxminded.aprihodko.model.Course;
 import com.foxminded.aprihodko.utils.SqlUtils;
 
-import static com.foxminded.aprihodko.utils.TransactionUtils.transaction;
+import java.io.Closeable;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
+
 import static com.foxminded.aprihodko.utils.ResourceUtils.loadPropertiesFromResources;
+import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
+import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 public class SchoolApp implements Closeable {
 
-   private final Datasource datasource;
-//   private final StudentsDaoImpl studentsDao;
-//   private final GroupDaoImpl groupDao;
-   private final CourseDaoImpl courseDao; // Course works
+    private final Datasource datasource;
+    //   private final StudentsDaoImpl studentsDao;
+    private final CourseDaoImpl courseDao;
 
-   public SchoolApp(Datasource datasource) throws SQLException {
-      this.datasource = datasource;
-      this.courseDao = new CourseDaoImpl();
-      SqlUtils.executeSqlScriptFile(datasource, "sql/createCourses.sql");
-//      this.studentsDao = new StudentsDaoImpl();
-//      SqlUtils.executeSqlScriptFile(datasource, "sql/createStudents.sql");
-//      this.groupDao = new GroupDaoImpl();
-//      SqlUtils.executeSqlScriptFile(datasource, "sql/createGroups.sql");
-   }
+    public SchoolApp(Datasource datasource) throws SQLException {
+        this.datasource = datasource;
+        SqlUtils.executeSqlScriptFile(datasource, "sql/create_schema.sql");
+        this.courseDao = new CourseDaoImpl();
+    }
 
-   private void run() throws SQLException {
-//      transaction(datasource, (connection -> new GeneratorGroups(groupDao).generateDate(connection, 10)));
-//      transaction(datasource, (connection -> new GenerateStudents(studentsDao).generateData(connection, 200)));
-      transaction(datasource, (connection -> new GenerateCourses(courseDao).generateDate(connection, 10)));
-   }
+    private void run() throws SQLException {
+        inTransaction(datasource, (connection -> new GenerateCourses(courseDao).generateDate(connection, 10)));
+        List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
+        System.out.println(courses);
+    }
 
-   @Override
-   public void close() throws IOException {
-      try {
-//         SqlUtils.executeSqlScriptFile(datasource, "sql/createStudents.sql");
-//         SqlUtils.executeSqlScriptFile(datasource, "sql/createGroups.sql");
-         SqlUtils.executeSqlScriptFile(datasource, "sql/createCourses.sql");
-      } catch (SQLException e) {
-         throw new IOException(e);
-      }
-   }
+    @Override
+    public void close() throws IOException {
+        try {
+            SqlUtils.executeSqlScriptFile(datasource, "sql/drop_schema.sql");
+        } catch (SQLException e) {
+            throw new IOException(e);
+        }
+    }
 
-   public static void main(String[] args) throws IOException, SQLException {
-      Properties databaseProperties = loadPropertiesFromResources("db.properties");
-      try (Datasource datasource = new SimpleDatasorce(databaseProperties);
-            SchoolApp schoolApp = new SchoolApp(datasource);) {
-         schoolApp.run();
-      }
-   }
+    public static void main(String[] args) throws IOException, SQLException {
+        String dbPropertiesFileName = args.length == 0 ? "db.properties" : args[0];
+        Properties databaseProperties = loadPropertiesFromResources(dbPropertiesFileName);
+        try (Datasource datasource = new SimpleDatasorce(databaseProperties);
+             SchoolApp schoolApp = new SchoolApp(datasource);) {
+            schoolApp.run();
+        }
+    }
+
 }
