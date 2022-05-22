@@ -27,21 +27,27 @@ import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 public class SchoolApp implements Closeable {
 
     private final Datasource datasource;
-    private final CourseDaoImpl courseDao;
+    private final CourseDaoImpl courseDaoImpl;
     private final StudentsDaoImpl studentsDaoImpl;
     private final GroupDaoImpl groupDaoImpl;
 
     public SchoolApp(Datasource datasource) throws SQLException {
         this.datasource = datasource;
         SqlUtils.executeSqlScriptFile(datasource, "sql/create_schema.sql");
-        this.courseDao = new CourseDaoImpl();
+        this.courseDaoImpl = new CourseDaoImpl();
         this.studentsDaoImpl = new StudentsDaoImpl();
         this.groupDaoImpl = new GroupDaoImpl();
     }
 
     private void run() throws SQLException {
-        inTransaction(datasource, (connection -> new GenerateStudents(studentsDaoImpl).generateData(connection, 10)));
+        inTransaction(datasource, (connection -> new GenerateStudents(studentsDaoImpl).generateData(connection, 200)));
+        inTransaction(datasource, (connection -> new GeneratorGroups(groupDaoImpl).generateDate(connection, 10)));
+        inTransaction(datasource, (connection -> new GenerateCourses(courseDaoImpl).generateDate(connection, 10)));
         List<Students> students = fromTransaction(datasource, studentsDaoImpl::findAll);
+        List<Group> groups = fromTransaction(datasource, groupDaoImpl::findAll);
+        List<Course> courses = fromTransaction(datasource, courseDaoImpl::findAll);
+        groups.forEach(System.out::println);
+        courses.forEach(System.out::println);
         students.forEach(System.out::println);
     }
 

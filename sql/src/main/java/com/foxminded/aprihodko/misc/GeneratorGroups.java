@@ -20,6 +20,9 @@ public class GeneratorGroups {
    }
 
    public void generateDate(Connection connection, int groupCount) throws SQLException {
+       if (groupCount > 10) {
+           throw new IllegalArgumentException("Count of group should be 10 or less");
+       }
       generateGroups(connection, groupCount);
    }
 

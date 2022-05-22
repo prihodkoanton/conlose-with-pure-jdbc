@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 import static com.foxminded.aprihodko.model.Students.*;
 
-;
-
 public class StudentsMapper implements Mapper<Students> {
 
     @Override
