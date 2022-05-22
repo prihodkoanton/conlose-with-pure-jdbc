@@ -36,7 +36,7 @@ public class GenerateStudents {
         final int groupCount = 10;
         for (int j = 0; j < groupCount; j++) {
             int countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
-            Long randomGroupId = (long) random.nextInt(groupCount);
+            int randomGroupId = random.nextInt(groupCount);
             for (int i = 0; i < countOfStudents; i++) {
                 if (students.size() < count) {
                     students.add(studentDao.save(connection, new Students(randomGroupId, fake.firstName(), fake.lastName())));

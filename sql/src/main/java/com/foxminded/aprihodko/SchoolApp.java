@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import static com.foxminded.aprihodko.utils.ResourceUtils.loadPropertiesFromResources;
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
@@ -52,7 +53,7 @@ public class SchoolApp implements Closeable {
             throw new IOException(e);
         }
     }
-//    throws IOException, SQLException
+    
     public static void main(String[] args)  throws IOException, SQLException{
         String dbPropertiesFileName = args.length == 0 ? "db.properties" : args[0];
         Properties databaseProperties = loadPropertiesFromResources(dbPropertiesFileName);

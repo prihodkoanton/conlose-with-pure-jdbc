@@ -10,15 +10,22 @@ public class Students extends LongEntity {
 
     private String firstName;
     private String lastName;
+    private int groupID;
 
+    public Students(Long id, int groupID, String firstName, String lastName) {
+        super(id);
+        this.groupID = groupID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
     public Students(Long id, String firstName, String lastName) {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Students(String firstName, String lastName) {
-        this(null, firstName, lastName);
+    public Students(int groupID, String firstName, String lastName) {
+        this(null, groupID, firstName, lastName);
     }
 
     public String getFirstName() {
@@ -35,6 +42,14 @@ public class Students extends LongEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    public int getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(int groupID) {
+        this.groupID = groupID;
     }
 
     @Override
