@@ -39,9 +39,9 @@ public class SchoolApp implements Closeable {
     }
 
     private void run() throws SQLException {
-        inTransaction(datasource, (connection -> new GenerateCourses(courseDao).generateDate(connection, 10)));
-        List<Course> courses = fromTransaction(datasource, courseDao::findAll);
-        courses.forEach(System.out::println);
+        inTransaction(datasource, (connection -> new GenerateStudents(studentsDaoImpl).generateData(connection, 10)));
+        List<Students> students = fromTransaction(datasource, studentsDaoImpl::findAll);
+        students.forEach(System.out::println);
     }
 
     @Override
@@ -60,6 +60,5 @@ public class SchoolApp implements Closeable {
                 SchoolApp schoolApp = new SchoolApp(datasource)) {
             schoolApp.run();
         }
-//        System.out.println("Hi all");
     }
 }
