@@ -44,4 +44,11 @@ public class Group extends LongEntity {
         Group other = (Group) obj;
         return Objects.equals(name, other.name);
     }
+
+    @Override
+    public String toString() {
+        return "Group [name=" + name + "]";
+    }
+    
+    
 }

@@ -56,4 +56,11 @@ public class Students extends LongEntity {
         Students other = (Students) obj;
         return Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName);
     }
+
+    @Override
+    public String toString() {
+        return "Students [firstName=" + firstName + ", lastName=" + lastName + "]";
+    }
+    
+    
 }

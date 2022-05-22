@@ -3,8 +3,14 @@ package com.foxminded.aprihodko;
 import com.foxminded.aprihodko.dao.datasource.Datasource;
 import com.foxminded.aprihodko.dao.datasource.SimpleDatasorce;
 import com.foxminded.aprihodko.dao.impl.CourseDaoImpl;
+import com.foxminded.aprihodko.dao.impl.GroupDaoImpl;
+import com.foxminded.aprihodko.dao.impl.StudentsDaoImpl;
 import com.foxminded.aprihodko.misc.GenerateCourses;
+import com.foxminded.aprihodko.misc.GenerateStudents;
+import com.foxminded.aprihodko.misc.GeneratorGroups;
 import com.foxminded.aprihodko.model.Course;
+import com.foxminded.aprihodko.model.Group;
+import com.foxminded.aprihodko.model.Students;
 import com.foxminded.aprihodko.utils.SqlUtils;
 
 import java.io.Closeable;
@@ -20,19 +26,22 @@ import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 public class SchoolApp implements Closeable {
 
     private final Datasource datasource;
-    //   private final StudentsDaoImpl studentsDao;
     private final CourseDaoImpl courseDao;
+    private final StudentsDaoImpl studentsDaoImpl;
+    private final GroupDaoImpl groupDaoImpl;
 
     public SchoolApp(Datasource datasource) throws SQLException {
         this.datasource = datasource;
         SqlUtils.executeSqlScriptFile(datasource, "sql/create_schema.sql");
         this.courseDao = new CourseDaoImpl();
+        this.studentsDaoImpl = new StudentsDaoImpl();
+        this.groupDaoImpl = new GroupDaoImpl();
     }
 
     private void run() throws SQLException {
         inTransaction(datasource, (connection -> new GenerateCourses(courseDao).generateDate(connection, 10)));
-        List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
-        System.out.println(courses);
+        List<Course> courses = fromTransaction(datasource, courseDao::findAll);
+        courses.forEach(System.out::println);
     }
 
     @Override
@@ -43,14 +52,14 @@ public class SchoolApp implements Closeable {
             throw new IOException(e);
         }
     }
-
-    public static void main(String[] args) throws IOException, SQLException {
+//    throws IOException, SQLException
+    public static void main(String[] args)  throws IOException, SQLException{
         String dbPropertiesFileName = args.length == 0 ? "db.properties" : args[0];
         Properties databaseProperties = loadPropertiesFromResources(dbPropertiesFileName);
         try (Datasource datasource = new SimpleDatasorce(databaseProperties);
-             SchoolApp schoolApp = new SchoolApp(datasource);) {
+                SchoolApp schoolApp = new SchoolApp(datasource)) {
             schoolApp.run();
         }
+//        System.out.println("Hi all");
     }
-
 }
