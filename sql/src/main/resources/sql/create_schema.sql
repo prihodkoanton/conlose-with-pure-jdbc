@@ -24,7 +24,7 @@ CREATE TABLE school.students
     group_id   bigserial                         NOT NULL,
     first_name text COLLATE pg_catalog."default" NOT NULL,
     last_name  text COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT students_pkey PRIMARY KEY (group_id)
+    CONSTRAINT students_pkey PRIMARY KEY (student_id)
 );
 
 
