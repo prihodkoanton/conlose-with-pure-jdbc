@@ -32,14 +32,17 @@ public class GenerateStudents {
         List<Students> students = new ArrayList<>();
         final int minStudentPerGroup = 10;
         final int maxStudentPerGroup = 30;
-        Random random = new Random();
         final int groupCount = 10;
+        int countOfStudents;
+        Random random = new Random();
+        int randomGroupId;
         for (int j = 0; j < groupCount; j++) {
-            int countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
-            int randomGroupId = random.nextInt(groupCount);
+            countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
+            randomGroupId = 1 + random.nextInt(groupCount);
             for (int i = 0; i < countOfStudents; i++) {
                 if (students.size() < count) {
-                    students.add(studentDao.save(connection, new Students(randomGroupId, fake.firstName(), fake.lastName())));
+                    students.add(studentDao.save(connection,
+                            new Students(randomGroupId, fake.firstName(), fake.lastName())));
                 }
             }
         }

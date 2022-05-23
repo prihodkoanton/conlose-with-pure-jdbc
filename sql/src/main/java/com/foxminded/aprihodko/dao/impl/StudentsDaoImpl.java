@@ -14,7 +14,7 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
     public static final String SELECT_ONE = "SELECT * FROM school.students where student_id = ?";
     public static final String FIND_BY_NAME = "SELECT * FROM school.students where first_name = ?";
     public static final String SELECT_ALL = "SELECT * FROM school.students";
-    public static final String INSERT_ONE = "INSERT INTO school.students(first_name, last_name) VALUES (?, ?)";
+    public static final String INSERT_ONE = "INSERT INTO school.students(group_id, first_name, last_name) VALUES (?, ?, ?)";
     public static final String UPDATE = "UPDATE school.students SET first_name = ?, last_name = ? where student_id = ?";
     public static final String DELETE_ONE = "DELETE FROM school.students WHERE student_id = ?";
 
@@ -78,8 +78,9 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
     @Override
     protected Students create(Connection connection, Students entity) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_ONE, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, entity.getFirstName());
-            ps.setString(2, entity.getLastName());
+            ps.setInt(1, entity.getGroupID());
+            ps.setString(2, entity.getFirstName());
+            ps.setString(3, entity.getLastName());
             if (ps.executeUpdate() != 1) {
                 throw new SQLException("Unable to create student " + entity);
             }
