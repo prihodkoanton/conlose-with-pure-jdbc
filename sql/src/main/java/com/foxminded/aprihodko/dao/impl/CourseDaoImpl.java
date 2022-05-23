@@ -62,7 +62,7 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
     }
 
     @Override
-    public Optional<Course> fingByName(Connection connection, String name) throws SQLException {
+    public Optional<Course> findByName(Connection connection, String name) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_NAME)) {
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
