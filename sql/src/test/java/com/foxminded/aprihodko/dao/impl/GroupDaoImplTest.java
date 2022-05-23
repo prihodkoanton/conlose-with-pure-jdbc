@@ -1,8 +1,11 @@
 package com.foxminded.aprihodko.dao.impl;
 
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
+import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -46,12 +49,22 @@ class GroupDaoImplTest extends DaoTestBaseClass {
     
     @Test
     void shouldDeleteById() throws SQLException{
-        
+        sql("sql/forGroups/find_by_id_groups.sql");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7432/antonprihodko",
+                "anton", "1234");
+        inTransaction(datasource, connections -> dao.deleteById(connections, 1000L));
+        Optional<Group> shouldBeEmpty = fromTransaction(datasource, connections -> dao.findById(connections, 1000L));
+        assertTrue(shouldBeEmpty.isEmpty());
     }
     
     @Test
     void shouldNotDeleteById() throws SQLException{
-        
+        sql("sql/forGroups/find_by_id_groups.sql");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7432/antonprihodko",
+                "anton", "1234");
+        Exception e = assertThrows(SQLException.class,
+                () -> inTransaction(datasource, connections -> dao.deleteById(connections, 1L)));
+        assertEquals("Exception in transaction", e.getMessage());
     }
     
     @Test

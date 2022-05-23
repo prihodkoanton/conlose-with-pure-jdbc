@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
+import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CourseDaoImplTest extends DaoTestBaseClass {
@@ -55,10 +57,19 @@ class CourseDaoImplTest extends DaoTestBaseClass {
         sql("sql/forCourse/find_by_id_courses.sql");
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7432/antonprihodko",
                 "anton", "1234");
-        Course delete = new Course(1000L, "find-me", "one description");
-        dao.deleteById(connection, 1000L);
+        inTransaction(datasource, connections -> dao.deleteById(connections, 1000L));
         Optional<Course> shouldBeEmpty = fromTransaction(datasource, connections -> dao.findById(connections, 1000L));
         assertTrue(shouldBeEmpty.isEmpty());
+    }
+    
+    @Test
+    void shouldNotDeleteById() throws SQLException{
+        sql("sql/forCourse/find_by_id_courses.sql");
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7432/antonprihodko",
+                "anton", "1234");
+        Exception e = assertThrows(SQLException.class,
+                () -> inTransaction(datasource, connections -> dao.deleteById(connections, 1L)));
+        assertEquals("Exception in transaction", e.getMessage());
     }
     
     @Test
