@@ -91,6 +91,4 @@ class StudentsDaoImplTest extends DaoTestBaseClass{
         expected.setId(actual.getId());
         assertEquals(expected, actual);
     }
-    
-    
 }
