@@ -3,7 +3,6 @@ package comfoxminded.aprihodko.misc;
 import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
