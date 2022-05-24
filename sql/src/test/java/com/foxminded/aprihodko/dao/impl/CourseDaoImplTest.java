@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
 import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -88,7 +89,20 @@ class CourseDaoImplTest extends DaoTestBaseClass {
     
     @Test
     void shouldCreate() throws SQLException{
-        Course actual;
-        
+        Course expected = new Course("new", "course");
+        Course actual = fromTransaction(datasource, connection -> dao.save(connection, expected));
+        assertNotNull(actual.getId());
+        expected.setId(actual.getId());
+        assertEquals(expected, actual);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

@@ -81,4 +81,13 @@ class GroupDaoImplTest extends DaoTestBaseClass {
         assertTrue(group.isEmpty());
     }
     
+    @Test
+    void shoudlCreate() throws SQLException{
+        Group expected = new Group("newGroup");
+        Group actual = fromTransaction(datasource, connection -> dao.save(connection, expected)); 
+        assertNotNull(actual.getId());
+        expected.setId(actual.getId());
+        assertEquals(expected, actual);
+    }
+    
 }

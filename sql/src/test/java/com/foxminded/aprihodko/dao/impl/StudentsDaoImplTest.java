@@ -83,5 +83,14 @@ class StudentsDaoImplTest extends DaoTestBaseClass{
         assertTrue(actual.isEmpty());
     }
     
+    @Test
+    void shoudlCreate() throws SQLException{
+        Students expected = new Students(1, "new", "student");
+        Students actual = fromTransaction(datasource, connection -> dao.save(connection, expected));
+        assertNotNull(actual.getId());
+        expected.setId(actual.getId());
+        assertEquals(expected, actual);
+    }
+    
     
 }
