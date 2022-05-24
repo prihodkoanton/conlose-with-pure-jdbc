@@ -36,14 +36,14 @@ public class GenerateStudents {
         int countOfStudents;
         Random random = new Random();
         int randomGroupId;
-        for (int j = 0; j < groupCount; j++) {
+        for (int j = 0; j < count; j++) {
             countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
             randomGroupId = random.nextInt(groupCount);
             for (int i = 0; i < countOfStudents; i++) {
                 if (students.size() < count) {
                     students.add(studentDao.save(connection,
                             new Students(randomGroupId, fake.firstName(), fake.lastName())));
-                }
+                } 
             }
         }
         return students;
