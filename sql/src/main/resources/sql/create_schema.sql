@@ -8,7 +8,8 @@ CREATE TABLE school.courses
 (
     course_id          bigserial                         NOT NULL,
     course_name        text COLLATE pg_catalog."default" NOT NULL,
-    course_description text COLLATE pg_catalog."default" NOT NULL
+    course_description text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT course_pkey PRIMARY KEY (course_id)
 );
 
 CREATE TABLE school.groups
@@ -27,4 +28,10 @@ CREATE TABLE school.students
     CONSTRAINT students_pkey PRIMARY KEY (student_id)
 );
 
+CREATE TABLE school.student_courses
+(
+    student_ref bigint not null references school.students (student_id),
+    course_ref  bigint not null references school.courses (course_id),
+    unique (student_ref, course_ref)
+);
 

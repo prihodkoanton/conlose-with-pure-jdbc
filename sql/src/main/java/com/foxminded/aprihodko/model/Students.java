@@ -12,7 +12,7 @@ public class Students extends LongEntity {
     private String lastName;
     private int groupID;
 
-    public Students(Long id, int groupID, String firstName, String lastName) {
+    public Students(Long id, int groupID,  String firstName, String lastName) {
         super(id);
         this.groupID = groupID;
         this.firstName = firstName;
@@ -57,7 +57,7 @@ public class Students extends LongEntity {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(firstName, lastName);
+        result = prime * result + Objects.hash(firstName, groupID, lastName);
         return result;
     }
 
@@ -70,13 +70,12 @@ public class Students extends LongEntity {
         if (getClass() != obj.getClass())
             return false;
         Students other = (Students) obj;
-        return Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName);
+        return Objects.equals(firstName, other.firstName) && groupID == other.groupID
+                && Objects.equals(lastName, other.lastName);
     }
 
     @Override
     public String toString() {
-        return "Students [firstName=" + firstName + ", lastName=" + lastName + "]";
+        return "Students [firstName=" + firstName + ", lastName=" + lastName + ", groupID=" + groupID + "]";
     }
-    
-    
 }

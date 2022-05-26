@@ -13,11 +13,13 @@ import java.util.Optional;
 public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements StudentDao {
     public static final String SELECT_ONE = "SELECT * FROM school.students where student_id = ?";
     public static final String FIND_BY_NAME = "SELECT * FROM school.students where first_name = ?";
+    public static final String FIND_BY_COURSE_ID = "SELECT s.* from school.students s left join school.student_courses sc on s.student_id = sc.student_ref where sc.course_ref = ?";
     public static final String SELECT_ALL = "SELECT * FROM school.students";
     public static final String INSERT_ONE = "INSERT INTO school.students(group_id, first_name, last_name) VALUES (?, ?, ?)";
     public static final String UPDATE = "UPDATE school.students SET first_name = ?, last_name = ? where student_id = ?";
     public static final String DELETE_ONE = "DELETE FROM school.students WHERE student_id = ?";
-
+    public static final String ASSGIN_COURSE_TO_STUDENT = "INSERT INTO school.student_courses(student_ref, course_ref) VALUES (?, ?)";
+    
     private final StudentsMapper mapper;
 
     public StudentsDaoImpl() {
@@ -105,5 +107,50 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
             }
             return new Students(entity.getId(), entity.getFirstName(), entity.getLastName());
         }
+    }
+
+    @Override
+    public List<Students> findByCourseId(Connection connection, Long id) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(FIND_BY_COURSE_ID)) {
+            ps.setLong(1, id);
+            if (ps.executeUpdate() != 1) {
+                throw new SQLException("Unable to find student by course (id = " + id + ")");
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Students> students = new ArrayList<>();
+                while (rs.next()) {
+                    students.add(mapper.apply(rs));
+                }
+                return students;
+            }
+        }
+    }
+
+    @Override
+    public void assignCourseToStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
+        
+        try(PreparedStatement ps = connection.prepareStatement(ASSGIN_COURSE_TO_STUDENT)){
+            ps.setLong(1, studentID);
+            ps.setLong(2, courseID);
+            if(ps.executeUpdate() != 1) {
+                throw new SQLException("Unable assign course (id = " + courseID + ")" + " to student (id = " + studentID + ")");
+            }
+        }
+    }
+
+    @Override
+    public void removeCourseFromStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    private static Long generateRandomStudentID() {
+        Long randomId = null;
+        return randomId;
+    }
+    private Long generateRandomCurseID() {
+        final Long coutOfCourse = 10L;
+        Long randomId = null;
+        return randomId;
     }
 }

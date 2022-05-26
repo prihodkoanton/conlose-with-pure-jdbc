@@ -38,17 +38,14 @@ public class Course extends LongEntity {
 
     @Override
     public String toString() {
-        return "Course{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return "Course [name=" + name + ", description=" + description + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + Objects.hash(name);
+        result = prime * result + Objects.hash(description, name);
         return result;
     }
 
@@ -61,6 +58,6 @@ public class Course extends LongEntity {
         if (getClass() != obj.getClass())
             return false;
         Course other = (Course) obj;
-        return Objects.equals(name, other.name);
+        return Objects.equals(description, other.description) && Objects.equals(name, other.name);
     }
 }

@@ -30,14 +30,12 @@ public class GenerateStudents {
 
     private List<Students> generateStudents(Connection connection, int count) throws SQLException {
         List<Students> students = new ArrayList<>();
-        final int minStudentPerGroup = 10;
-        final int maxStudentPerGroup = 30;
         final int groupCount = 10;
         int countOfStudents;
         Random random = new Random();
         int randomGroupId;
         for (int j = 0; j < count; j++) {
-            countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
+            countOfStudents = countOfStudentsInOneGroup();
             randomGroupId = random.nextInt(groupCount);
             for (int i = 0; i < countOfStudents; i++) {
                 if (students.size() < count) {
@@ -48,4 +46,14 @@ public class GenerateStudents {
         }
         return students;
     }
+    
+    private static int countOfStudentsInOneGroup() throws SQLException{
+        final int minStudentPerGroup = 10;
+        final int maxStudentPerGroup = 30;
+        Random random = new Random();
+        int countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
+        return countOfStudents;
+    }
+    
+    
 }
