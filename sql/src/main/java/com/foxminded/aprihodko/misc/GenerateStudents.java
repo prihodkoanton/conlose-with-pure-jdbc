@@ -47,13 +47,10 @@ public class GenerateStudents {
         return students;
     }
     
-    private static int countOfStudentsInOneGroup() throws SQLException{
+    private static int countOfStudentsInOneGroup(){
         final int minStudentPerGroup = 10;
         final int maxStudentPerGroup = 30;
         Random random = new Random();
-        int countOfStudents = minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
-        return countOfStudents;
+        return minStudentPerGroup + random.nextInt(maxStudentPerGroup - minStudentPerGroup);
     }
-    
-    
 }

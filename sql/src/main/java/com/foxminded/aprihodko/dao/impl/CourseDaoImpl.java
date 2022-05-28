@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements CourseDao {
     public static final String SELECT_ONE = "SELECT * FROM school.courses where course_id = ?";
     public static final String FIND_BY_NAME = "SELECT * FROM school.courses where course_name = ?";
-    public static final String FIND_BY_STUDENTS_ID = "SELECT s.* from school.course s left join school.student_courses sc on s.student_id = sc.student_ref where sc.course_ref = ?";
+    public static final String FIND_BY_STUDENTS_ID = "SELECT c.* from school.courses c left join school.student_courses sc on c.course_id = sc.course_ref where sc.student_ref = ?";
     public static final String SELECT_ALL = "SELECT * FROM school.courses";
     public static final String INSERT_ONE = "INSERT INTO school.courses(course_name, course_description) VALUES (?, ?)";
     public static final String UPDATE = "UPDATE school.courses SET course_name = ?, courses_description = ? where course_id = ?";
@@ -111,9 +111,6 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
     public List<Course> findByStudentId(Connection connection, Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_STUDENTS_ID)) {
             ps.setLong(1, id);
-            if (ps.executeUpdate() != 1) {
-                throw new SQLException("Unable to find curse by student (id = " + id + ")");
-            }
             try (ResultSet rs = ps.executeQuery()) {
                 List<Course> courses = new ArrayList<>();
                 while (rs.next()) {

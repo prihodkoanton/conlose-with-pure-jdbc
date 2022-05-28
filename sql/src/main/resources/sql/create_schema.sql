@@ -1,5 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS school;
 
+DROP TABLE IF EXISTS school.student_courses;
 DROP TABLE IF EXISTS school.courses;
 DROP TABLE IF EXISTS school.groups;
 DROP TABLE IF EXISTS school.students;

@@ -113,9 +113,6 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
     public List<Students> findByCourseId(Connection connection, Long id) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(FIND_BY_COURSE_ID)) {
             ps.setLong(1, id);
-            if (ps.executeUpdate() != 1) {
-                throw new SQLException("Unable to find student by course (id = " + id + ")");
-            }
             try (ResultSet rs = ps.executeQuery()) {
                 List<Students> students = new ArrayList<>();
                 while (rs.next()) {
@@ -128,7 +125,6 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
 
     @Override
     public void assignCourseToStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
-        
         try(PreparedStatement ps = connection.prepareStatement(ASSGIN_COURSE_TO_STUDENT)){
             ps.setLong(1, studentID);
             ps.setLong(2, courseID);
@@ -142,15 +138,5 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
     public void removeCourseFromStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
         // TODO Auto-generated method stub
         
-    }
-    
-    private static Long generateRandomStudentID() {
-        Long randomId = null;
-        return randomId;
-    }
-    private Long generateRandomCurseID() {
-        final Long coutOfCourse = 10L;
-        Long randomId = null;
-        return randomId;
     }
 }
