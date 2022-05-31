@@ -73,11 +73,12 @@ public class SchoolApp implements Closeable {
         MenuScreen course = new DynamicMenuScreen("courses", "Courses", listMakesForCourses());
         MenuScreen student = new DynamicMenuScreen("students", "Students", listMakesForStudents());
         MenuScreen group = new DynamicMenuScreen("groups", "Groups", listMakesForGroups());
-        MenuScreen school = new StaticMenuScreen("School", "Welcome to School",
-                Arrays.asList(new NavigateAction(group), new NavigateAction(student), new NavigateAction(course)));
-        StaticMenuScreen main = new StaticMenuScreen("main", "Main menu", Arrays.asList(new NavigateAction(school)));
-        Menu menu = new Menu(console, Arrays.asList(main, school, course, student, group));
+        StaticMenuScreen main = new StaticMenuScreen("main", "Main menu", Arrays.asList(new NavigateAction(course), new NavigateAction(student), new NavigateAction(group)));
+        Menu menu = new Menu(console, Arrays.asList(main, course, student, group));
+//        menu.show("main");
         menu.show("main");
+//        Menu menu1 = new Menu(console);
+//        forGroups(listMakesForGroups());
     }
 
     @Override
@@ -104,7 +105,7 @@ public class SchoolApp implements Closeable {
         List<Action> result = new ArrayList<>();
         for (int i = 0; i < makes.size(); i++) {
             String make = makes.get(i);
-            result.add(new NavigateAction(make, "make for Groups"));
+            result.add(new NavigateAction(make, "makes for Groups"));
         }
         return result;
     }
@@ -129,5 +130,16 @@ public class SchoolApp implements Closeable {
             result.add(new NavigateAction(make, "make second Navigation"));
         }
         return result;
+    }
+    
+    private void forGroups(List<Action> actions) throws SQLException {
+        List<Group> groups = fromTransaction(datasource, groupDaoImpl::findAll);
+        int action = actions.size();
+        switch (action) {
+        case 1:
+            groups.forEach(System.out::println);
+        default:
+            break;
+        }
     }
 }

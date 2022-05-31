@@ -9,7 +9,6 @@ public class MakeMenuScreen extends DynamicMenuScreen{
 
 public MakeMenuScreen(String name, String title, List<Action> actions) {
         super(name, title, actions);
-        // TODO Auto-generated constructor stub
     }
 
 //    public MakeMenuScreen() {

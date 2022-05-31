@@ -29,7 +29,7 @@ public interface Console extends Closeable{
             if (input >= min && input <= max) {
                 return input;
             }
-            println(String.format("Wrong input %d, expected(%d,,,%d)", input, min, max));
+            println(String.format("Wrong input %d, expected(%d...%d)", input, min, max));
         } while (true);
     }
 }

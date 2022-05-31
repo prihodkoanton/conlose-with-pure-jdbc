@@ -19,7 +19,7 @@ public interface MenuScreen {
         StringBuffer sb = new StringBuffer();
         String menuTitle = Stream.concat(history.stream(), Stream.of(this))
                 .map(MenuScreen::getTitle)
-                .collect(Collectors.joining(" > "));
+                .collect(Collectors.joining(" -> "));
         sb.append(String.format(" [ %s ]", menuTitle)).append(EOL);
         List<Action> actions = getActions();
         for(int i = 0; i < actions.size(); i ++) {
