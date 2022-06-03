@@ -5,18 +5,16 @@ import java.util.List;
 import com.foxminded.aprihodko.menu.actions.Action;
 import com.foxminded.aprihodko.menu.screens.MenuScreen;
 
-public class DynamicMenuScreen implements MenuScreen{
+public abstract class DynamicMenuScreen implements MenuScreen {
 
     private final String name;
     private final String title;
-    private final List<Action> actions;
-    
-    public DynamicMenuScreen(String name, String title, List<Action> actions) {
+
+    public DynamicMenuScreen(String name, String title) {
         this.name = name;
         this.title = title;
-        this.actions = actions;
     }
-    
+
     @Override
     public String getName() {
         return name;
@@ -27,8 +25,5 @@ public class DynamicMenuScreen implements MenuScreen{
         return title;
     }
 
-    @Override
-    public List<Action> getActions() {
-        return (List<Action>) actions;
-    }
+    public abstract List<Action> getActions();
 }

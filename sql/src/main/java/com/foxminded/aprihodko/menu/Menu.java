@@ -1,10 +1,9 @@
 package com.foxminded.aprihodko.menu;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.foxminded.aprihodko.menu.actions.Action;
 import com.foxminded.aprihodko.menu.actions.ActionConstants;
@@ -19,19 +18,16 @@ public class Menu {
     private final Map<String, MenuScreen> screens;
     private final LinkedList<MenuScreen> breadCrumbs;
 
-    public Menu(Console console) {
-        this(console, new HashMap<>());
-    }
+    private final List<DynamicNavigationHandler> dynamicNavigationHandlers;
 
-    public Menu(Console console, Map<String, MenuScreen> screens) {
+
+    public Menu(Console console, List<MenuScreen> screens, List<DynamicNavigationHandler> dynamicNavigationHandlers) {
         this.console = console;
-        this.screens = screens;
+        this.screens = screens.stream().collect(Collectors.toMap(
+                MenuScreen::getName, it -> it
+        ));
+        this.dynamicNavigationHandlers = dynamicNavigationHandlers;
         breadCrumbs = new LinkedList<>();
-    }
-
-    public Menu(Console console, Collection<MenuScreen> screens) {
-        this(console);
-        screens.forEach(screen -> addScreen(screen));
     }
 
     public void addScreen(MenuScreen screen) {
@@ -41,7 +37,15 @@ public class Menu {
     public void show(String screenName) {
         MenuScreen screen = screens.get(screenName);
         if (screen == null) {
-            throw new IllegalStateException("MenuScreen '" + screenName + "' not defined");
+            for (DynamicNavigationHandler handler : dynamicNavigationHandlers) {
+                screen = handler.apply(screenName);
+                if (screen != null) {
+                    break;
+                }
+            }
+            if (screen == null) {
+                throw new IllegalStateException("MenuScreen '" + screenName + "' not defined");
+            }
         }
         play(screen);
     }
@@ -53,18 +57,19 @@ public class Menu {
         Action next = option == 0 ? exitAction : screen.getActions().get(option - 1);
 
         switch (next.apply(console)) {
-        case ActionConstants.BACK:
-            play(this.breadCrumbs.pop());
-            break;
-        case ActionConstants.EXIT:
-            break;
-        default:
-            this.breadCrumbs.push(screen);
-            show(next.apply(console));
+            case ActionConstants.BACK:
+                play(this.breadCrumbs.pop());
+                break;
+            case ActionConstants.EXIT:
+                break;
+            default:
+                this.breadCrumbs.push(screen);
+                show(next.apply(console));
         }
     }
 
     private Action exitOrBack(List<MenuScreen> breadCrumbs) {
         return breadCrumbs.isEmpty() ? new ExitAction() : new BackAction();
     }
+
 }
