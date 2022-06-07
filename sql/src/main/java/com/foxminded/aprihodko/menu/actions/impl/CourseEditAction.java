@@ -13,10 +13,10 @@ public class CourseEditAction extends AbstractAction{
     private CourseDao courseDao;
     
     public CourseEditAction(Datasource datasource, CourseDao courseDao, Course course) {
-        super("Edit course" + course.getName(), (console -> {
+        super("Edit course '" + course.getName() + "' with dicreption: '" + course.getDescription() +"'", (console -> {
             String newName = console.askForString("Enter new course name");
             String newDiscription = console.askForString("Enter new course discription");
-            if (newName.isEmpty() && newDiscription.isEmpty()){
+            if (!newName.isEmpty()){
                 course.setName(newName);
                 course.setDescription(newDiscription);
                 try {

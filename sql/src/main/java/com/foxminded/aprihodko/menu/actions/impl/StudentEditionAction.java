@@ -12,15 +12,15 @@ public class StudentEditionAction extends AbstractAction{
     private final Datasource datasource;
     private final StudentDao studentDao;
     
-    public StudentEditionAction(Datasource datasource, StudentDao studentDao, Students students) {
-        super("Edit student " + students.getFirstName() +" "+ students.getLastName(), console -> {
+    public StudentEditionAction(Datasource datasource, StudentDao studentDao, Students student) {
+        super("Edit student " + student.getFirstName() +" "+ student.getLastName(), console -> {
             String newFirstName = console.askForString("Enter new firt student name");
             String newLastName = console.askForString("Enter new last student name");
             if(!newFirstName.isEmpty()) {
-                students.setFirstName(newFirstName);
-                students.setLastName(newLastName);
+                student.setFirstName(newFirstName);
+                student.setLastName(newLastName);
                 try {
-                    inTransaction(datasource, connection -> studentDao.save(connection, students));
+                    inTransaction(datasource, connection -> studentDao.save(connection, student));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

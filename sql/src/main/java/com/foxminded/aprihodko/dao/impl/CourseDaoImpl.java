@@ -16,7 +16,7 @@ public class CourseDaoImpl extends AbstractCrudDao<Course, Long> implements Cour
     public static final String FIND_BY_STUDENTS_ID = "SELECT c.* from school.courses c left join school.student_courses sc on c.course_id = sc.course_ref where sc.student_ref = ?";
     public static final String SELECT_ALL = "SELECT * FROM school.courses";
     public static final String INSERT_ONE = "INSERT INTO school.courses(course_name, course_description) VALUES (?, ?)";
-    public static final String UPDATE = "UPDATE school.courses SET course_name = ?, courses_description = ? where course_id = ?";
+    public static final String UPDATE = "UPDATE school.courses SET course_name = ?, course_description = ? where course_id = ?";
     public static final String DELETE_ONE = "DELETE FROM school.courses WHERE course_id = ?";
 
     private CourseMapper mapper;

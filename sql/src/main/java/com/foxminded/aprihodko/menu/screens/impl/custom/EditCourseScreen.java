@@ -35,9 +35,9 @@ public class EditCourseScreen extends DynamicMenuScreen {
     private DynamicNavigationHandler createDynamicHandler(Datasource datasource, CourseDao courseDao) {
         return screenName -> {
             String[] parts = screenName.split("_");
-            if (parts.length != 2 || "editCourse".equals(parts[0])) {
-                throw new IllegalAccessError("EditCourseClass");
-            }
+//            if (parts.length != 2 || "editCourse".equals(parts[0])) {
+//                throw new IllegalAccessError("EditCourseScreen createDynamicHandler");
+//            }
             long id = Long.parseLong(parts[1]);
             return handleCourseById(screenName, id);
         };
