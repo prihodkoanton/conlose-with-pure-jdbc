@@ -17,51 +17,87 @@ import com.foxminded.aprihodko.menu.actions.impl.NavigateAction;
 import com.foxminded.aprihodko.menu.console.Console;
 import com.foxminded.aprihodko.menu.screens.MenuScreen;
 import com.foxminded.aprihodko.menu.screens.impl.StaticMenuScreen;
+import com.foxminded.aprihodko.menu.screens.impl.custom.EditCourseScreen;
 import com.foxminded.aprihodko.menu.screens.impl.custom.EditGroupScreen;
+import com.foxminded.aprihodko.menu.screens.impl.custom.EditStudentScreen;
+import com.foxminded.aprihodko.model.Course;
 import com.foxminded.aprihodko.model.Group;
+import com.foxminded.aprihodko.model.Students;
+
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
 
 public class AppMenu {
     private final Console console;
     private final Datasource datasource;
     private final GroupDao groupDao;
-    private final StudentDao studentsDaoImpl;
-    private final CourseDao courseDaoImpl;
+    private final StudentDao studentsDao;
+    private final CourseDao courseDao;
 
-    public AppMenu(Console console,
-                   Datasource datasource,
-                   GroupDao groupDao,
-                   StudentDao studentsDaoImpl,
-                   CourseDao courseDaoImpl) {
+    public AppMenu(Console console, Datasource datasource, GroupDao groupDao, StudentDao studentsDao,
+            CourseDao courseDao) {
 
         this.console = console;
         this.datasource = datasource;
         this.groupDao = groupDao;
-        this.studentsDaoImpl = studentsDaoImpl;
-        this.courseDaoImpl = courseDaoImpl;
+        this.studentsDao = studentsDao;
+        this.courseDao = courseDao;
     }
 
     public void run() {
-        MenuScreen course = new StaticMenuScreen("courses", "Courses", listMakesForCourses());
-        MenuScreen student = new StaticMenuScreen("students", "Students", listMakesForStudents());
+        EditCourseScreen editCourse = new EditCourseScreen(datasource, courseDao);
         EditGroupScreen editGroups = new EditGroupScreen(datasource, groupDao);
-        MenuScreen group = new StaticMenuScreen("groups", "Groups", Arrays.asList(
-                new NavigateAction(editGroups.getTitle(), editGroups.getName()),
-                new AbstractAction("Find all Groups", (console) -> findAllGroups(console)),
-                new AbstractAction("Find all groups with less or equals student count", (console) -> findAllGroupsWithLessStudents(console))
-        ));
-        StaticMenuScreen main = new StaticMenuScreen("main",
-                "Main menu",
-                Arrays.asList(new NavigateAction(course), new NavigateAction(student), new NavigateAction(group)));
-        Menu menu = new Menu(console, Arrays.asList(main, course, student, group, editGroups), Arrays.asList(editGroups.getGroupEditScreenHandler()));
+        EditStudentScreen editStudent = new EditStudentScreen(datasource, studentsDao);
+        MenuScreen students = menuScreenForStudents(editStudent);
+        MenuScreen group = menuScreenForGroup(editGroups);
+        MenuScreen course = menuScreenForCourse(editCourse);
+        StaticMenuScreen main = new StaticMenuScreen("main", "Main menu",
+                Arrays.asList(new NavigateAction(course), new NavigateAction(students), new NavigateAction(group)));
+        Menu menu = new Menu(console, Arrays.asList(main, course, students, group, editGroups, editStudent, editCourse),
+                Arrays.asList(editGroups.getGroupEditScreenHandler(), editStudent.getStudentEditScreenHandler(), editCourse.getCourseEditScreeenHandler()));
         menu.show("main");
+    }
+    
+    
+    private MenuScreen menuScreenForCourse(EditCourseScreen editCourse) {
+        return new StaticMenuScreen("courses", "Courses", 
+                                    Arrays.asList(new NavigateAction(editCourse.getTitle(), editCourse.getName()),
+                                            new AbstractAction("Find all Courses", console -> findAllCourses(console))));
+    }
+    
+    private MenuScreen menuScreenForGroup(EditGroupScreen editGroups) {
+        return new StaticMenuScreen("groups", "Groups",
+                Arrays.asList(new NavigateAction(editGroups.getTitle(), editGroups.getName()),
+                        new AbstractAction("Find all Groups", (console) -> findAllGroups(console)),
+                        new AbstractAction("Find all groups with less or equals student count",
+                                (console) -> findAllGroupsWithLessStudents(console))));
+    }
+    
+    private MenuScreen menuScreenForStudents(EditStudentScreen editStudent) {
+        return new StaticMenuScreen("students", "Students", 
+                Arrays.asList(new NavigateAction(editStudent.getTitle(), editStudent.getName()),
+                        new AbstractAction("Find all Students", (console) -> findAllStudents(console))));
+    }
+
+    private String findAllStudents(Console console) {
+        try {
+            List<Students> students = fromTransaction(datasource, connection -> studentsDao.findAll(connection));
+            AtomicInteger count = new AtomicInteger();
+            String result = students.stream()
+                    .map(student -> String.format("%-2d. %s", count.incrementAndGet(), student.getFirstName(), student.getLastName()))
+                    .collect(Collectors.joining("\n"));
+            console.println(result);
+            return "students";
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
     }
 
     private String findAllGroups(Console console) {
         try {
             List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAll(connection));
             AtomicInteger count = new AtomicInteger();
-            String result = groups.stream().map(group -> String.format("%-2d. %s", count.incrementAndGet(), group.getName()))
+            String result = groups.stream()
+                    .map(group -> String.format("%-2d. %s", count.incrementAndGet(), group.getName()))
                     .collect(Collectors.joining("\n"));
             console.println(result);
             return "groups";
@@ -69,41 +105,22 @@ public class AppMenu {
             throw new RuntimeException(e);
         }
     }
+    
+    private String findAllCourses(Console console) {
+        try {
+            List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
+            AtomicInteger count = new AtomicInteger();
+            String result = courses.stream()
+                    .map(course -> String.format("%-2d. %s", count.incrementAndGet(), course.getName()))
+                    .collect(Collectors.joining("\n"));
+            console.println(result);
+            return "courses";
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
 
     private String findAllGroupsWithLessStudents(Console console) {
         return null;
-    }
-
-
-    private List<Action> listMakesForGroups() {
-        List<String> makes = Arrays.asList("Find all Groups", "Find all groups with less or equals student count");
-        List<Action> result = new ArrayList<>();
-        for (int i = 0; i < makes.size(); i++) {
-            String make = makes.get(i);
-            result.add(new NavigateAction(make, "makes for Groups"));
-        }
-        return result;
-    }
-
-    private List<Action> listMakesForStudents() {
-        List<String> makes = Arrays.asList("Find all students related to course with given name", "Add new student",
-                "Delete student by id", "Add a student to the course", "Remove the student from one or more courses");
-        List<Action> result = new ArrayList<>();
-        for (int i = 0; i < makes.size(); i++) {
-            String make = makes.get(i);
-            result.add(new NavigateAction(make, "makes for Students"));
-        }
-        return result;
-    }
-
-    private List<Action> listMakesForCourses() {
-        List<String> makes = Arrays.asList("Need", "Need To");
-        List<Action> result = new ArrayList<>();
-        result.add(new NavigateAction("Add new make NAVIGATION", "add make form Navigation"));
-        for (int i = 0; i < makes.size(); i++) {
-            String make = makes.get(i);
-            result.add(new NavigateAction(make, "make second Navigation"));
-        }
-        return result;
     }
 }
