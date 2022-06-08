@@ -17,6 +17,7 @@ import com.foxminded.aprihodko.menu.actions.impl.NavigateAction;
 import com.foxminded.aprihodko.menu.console.Console;
 import com.foxminded.aprihodko.menu.screens.MenuScreen;
 import com.foxminded.aprihodko.menu.screens.impl.StaticMenuScreen;
+import com.foxminded.aprihodko.menu.screens.impl.custom.DeleteStudent;
 import com.foxminded.aprihodko.menu.screens.impl.custom.EditCourseScreen;
 import com.foxminded.aprihodko.menu.screens.impl.custom.EditGroupScreen;
 import com.foxminded.aprihodko.menu.screens.impl.custom.EditStudentScreen;
@@ -47,13 +48,17 @@ public class AppMenu {
         EditCourseScreen editCourse = new EditCourseScreen(datasource, courseDao);
         EditGroupScreen editGroups = new EditGroupScreen(datasource, groupDao);
         EditStudentScreen editStudent = new EditStudentScreen(datasource, studentsDao);
-        MenuScreen students = menuScreenForStudents(editStudent);
+        DeleteStudent deleteStudent = new DeleteStudent(datasource, studentsDao);
+        MenuScreen students = menuScreenForStudents(editStudent, deleteStudent);
         MenuScreen group = menuScreenForGroup(editGroups);
         MenuScreen course = menuScreenForCourse(editCourse);
         StaticMenuScreen main = new StaticMenuScreen("main", "Main menu",
                 Arrays.asList(new NavigateAction(course), new NavigateAction(students), new NavigateAction(group)));
         Menu menu = new Menu(console, Arrays.asList(main, course, students, group, editGroups, editStudent, editCourse),
-                Arrays.asList(editCourse.getCourseEditScreeenHandler(), editGroups.getGroupEditScreenHandler(), editStudent.getStudentEditScreenHandler()));
+                Arrays.asList(editCourse.getCourseEditScreeenHandler(),
+                        editGroups.getGroupEditScreenHandler(),
+                        editStudent.getStudentEditScreenHandler(),
+                        deleteStudent.getStudentDeleteScreenHandler()));
         menu.show("main");
     }
     
@@ -72,9 +77,9 @@ public class AppMenu {
                                 (console) -> findAllGroupsWithLessStudents(console))));
     }
     
-    private MenuScreen menuScreenForStudents(EditStudentScreen editStudent) {
+    private MenuScreen menuScreenForStudents(EditStudentScreen editStudent, DeleteStudent deleteStuden) {
         return new StaticMenuScreen("students", "Students", 
-                Arrays.asList(new NavigateAction(editStudent.getTitle(), editStudent.getName()),
+                Arrays.asList(new NavigateAction(editStudent.getTitle(), editStudent.getName()), new NavigateAction(deleteStuden.getTitle(), deleteStuden.getName()),
                         new AbstractAction("Find all Students", (console) -> findAllStudents(console))));
     }
 

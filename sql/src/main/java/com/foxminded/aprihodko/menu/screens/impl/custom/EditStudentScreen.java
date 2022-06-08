@@ -13,6 +13,7 @@ import com.foxminded.aprihodko.menu.DynamicNavigationHandler;
 import com.foxminded.aprihodko.menu.actions.Action;
 import com.foxminded.aprihodko.menu.actions.impl.NavigateAction;
 import com.foxminded.aprihodko.menu.actions.impl.StudentEditionAction;
+import com.foxminded.aprihodko.menu.actions.impl.StudentRemoveAction;
 import com.foxminded.aprihodko.menu.screens.MenuScreen;
 import com.foxminded.aprihodko.menu.screens.impl.DynamicMenuScreen;
 import com.foxminded.aprihodko.menu.screens.impl.StaticMenuScreen;
@@ -35,7 +36,7 @@ public class EditStudentScreen extends DynamicMenuScreen {
     private DynamicNavigationHandler createDynamicHandler(Datasource datasource, StudentDao studentDao) {
         return screenName -> {
             String[] parts = screenName.split("_");
-//            if (parts.length != 2 || !"editStudent".equals(parts[0])) {
+//            if (parts.length != 3) {
 //                throw new IllegalAccessError("createDynamicHandler");
 //            }
             long id = Long.parseLong(parts[1]);
@@ -50,8 +51,8 @@ public class EditStudentScreen extends DynamicMenuScreen {
             if (mayBeStudent.isEmpty()) {
                 throw new IllegalAccessError("handleStudentById");
             }
-            return new StaticMenuScreen(screenName, mayBeStudent.get().getFirstName(),
-                    Arrays.asList(new StudentEditionAction(datasource, studentDao, mayBeStudent.get())));
+            return new StaticMenuScreen(screenName, mayBeStudent.get().getFirstName() + " " + mayBeStudent.get().getLastName(),
+                    Arrays.asList(new StudentEditionAction(datasource, studentDao, mayBeStudent.get()), new StudentRemoveAction(datasource, studentDao, mayBeStudent.get())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

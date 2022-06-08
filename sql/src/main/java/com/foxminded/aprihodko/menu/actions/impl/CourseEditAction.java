@@ -16,7 +16,7 @@ public class CourseEditAction extends AbstractAction{
         super("Edit course '" + course.getName() + "' with dicreption: '" + course.getDescription() +"'", (console -> {
             String newName = console.askForString("Enter new course name");
             String newDiscription = console.askForString("Enter new course discription");
-            if (!newName.isEmpty()){
+            if (!newName.isEmpty() && !newDiscription.isEmpty()){
                 course.setName(newName);
                 course.setDescription(newDiscription);
                 try {

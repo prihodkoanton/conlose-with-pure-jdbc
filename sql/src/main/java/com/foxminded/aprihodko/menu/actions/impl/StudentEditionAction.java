@@ -16,7 +16,7 @@ public class StudentEditionAction extends AbstractAction{
         super("Edit student " + student.getFirstName() +" "+ student.getLastName(), console -> {
             String newFirstName = console.askForString("Enter new firt student name");
             String newLastName = console.askForString("Enter new last student name");
-            if(!newFirstName.isEmpty()) {
+            if(!newFirstName.isEmpty() && !newLastName.isEmpty()) {
                 student.setFirstName(newFirstName);
                 student.setLastName(newLastName);
                 try {
