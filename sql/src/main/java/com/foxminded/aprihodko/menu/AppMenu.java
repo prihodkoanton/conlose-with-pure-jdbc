@@ -54,14 +54,13 @@ public class AppMenu {
         MenuScreen course = menuScreenForCourse(editCourse);
         StaticMenuScreen main = new StaticMenuScreen("main", "Main menu",
                 Arrays.asList(new NavigateAction(course), new NavigateAction(students), new NavigateAction(group)));
-        Menu menu = new Menu(console, Arrays.asList(main, course, students, group, editGroups, editStudent, editCourse),
+        Menu menu = new Menu(console, Arrays.asList(main, course, students, group, editGroups, editStudent, editCourse, deleteStudent),
                 Arrays.asList(editCourse.getCourseEditScreeenHandler(),
                         editGroups.getGroupEditScreenHandler(),
                         editStudent.getStudentEditScreenHandler(),
                         deleteStudent.getStudentDeleteScreenHandler()));
         menu.show("main");
     }
-    
     
     private MenuScreen menuScreenForCourse(EditCourseScreen editCourse) {
         return new StaticMenuScreen("courses", "Courses", 

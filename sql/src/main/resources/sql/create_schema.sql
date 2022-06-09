@@ -31,8 +31,8 @@ CREATE TABLE school.students
 
 CREATE TABLE school.student_courses
 (
-    student_ref bigint not null references school.students (student_id),
-    course_ref  bigint not null references school.courses (course_id),
+    student_ref bigint not null references school.students (student_id) ON DELETE CASCADE,
+    course_ref  bigint not null references school.courses (course_id) ON DELETE CASCADE,
     unique (student_ref, course_ref)
 );
 
