@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.foxminded.aprihodko.dao.StudentDao;
 import com.foxminded.aprihodko.dao.datasource.Datasource;
+import com.foxminded.aprihodko.menu.actions.ActionConstants;
 import com.foxminded.aprihodko.menu.console.Console;
 import com.foxminded.aprihodko.model.Students;
 
@@ -29,26 +30,11 @@ public class StudentAddAction extends AbstractAction{
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                return findAllStudents(console);
+                return ActionConstants.BACK;
             }
             return "";
         });
         this.datasource = datasource;
         this.studentDao = studentDao;
-    }
-    
-    private static String findAllStudents(Console console) {
-        try {
-            List<Students> students = fromTransaction(datasource, connection -> studentDao.findAll(connection));
-            AtomicInteger count = new AtomicInteger();
-            String result = students.stream()
-                    .map(student -> String.format("%2d) %s", count.incrementAndGet(), student.getFirstName(), student.getLastName()))
-                    .collect(Collectors.joining("\n"));
-            String counts = String.valueOf(students.size());
-            console.println(counts);
-            return "students";
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
     }
 }
