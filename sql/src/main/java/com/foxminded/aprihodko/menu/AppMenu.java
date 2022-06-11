@@ -88,9 +88,10 @@ public class AppMenu {
             List<Students> students = fromTransaction(datasource, connection -> studentsDao.findAll(connection));
             AtomicInteger count = new AtomicInteger();
             String result = students.stream()
-                    .map(student -> String.format("%-2d. %s", count.incrementAndGet(), student.getFirstName(), student.getLastName()))
+                    .map(student -> String.format("%2d) %s", count.incrementAndGet(), student.getFirstName(), student.getLastName()))
                     .collect(Collectors.joining("\n"));
-            console.println(result);
+            String counts = String.valueOf(students.size());
+            console.println(counts);
             return "students";
         } catch (SQLException e) {
             throw new RuntimeException();
@@ -102,7 +103,7 @@ public class AppMenu {
             List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAll(connection));
             AtomicInteger count = new AtomicInteger();
             String result = groups.stream()
-                    .map(group -> String.format("%-2d. %s", count.incrementAndGet(), group.getName()))
+                    .map(group -> String.format("%2d) %s", count.incrementAndGet(), group.getName()))
                     .collect(Collectors.joining("\n"));
             console.println(result);
             return "groups";
@@ -116,7 +117,7 @@ public class AppMenu {
             List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
             AtomicInteger count = new AtomicInteger();
             String result = courses.stream()
-                    .map(course -> String.format("%-2d. %s", count.incrementAndGet(), course.getName()))
+                    .map(course -> String.format("%2d) %s", count.incrementAndGet(), course.getName()))
                     .collect(Collectors.joining("\n"));
             console.println(result);
             return "courses";

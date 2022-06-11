@@ -14,7 +14,7 @@ public class StudentRemoveAction extends AbstractAction {
     private final StudentDao studentDao;
 
     public StudentRemoveAction(Datasource datasource, StudentDao studentDao, Students student) {
-        super("Delete student " + student.getFirstName() + " " + student.getLastName() + " with id'" + student.getId() +"'", console -> {
+        super("Delete student " + student.getFirstName() + " " + student.getLastName() + " with id: '" + student.getId() +"'", console -> {
                 try {
                     inTransaction(datasource, connection -> studentDao.deleteById(connection, student.getId()));
                 } catch (SQLException e) {

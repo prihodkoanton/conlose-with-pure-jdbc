@@ -1,6 +1,7 @@
 package com.foxminded.aprihodko.menu;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
@@ -90,6 +91,16 @@ class AppMenuTest {
         Students student = new Students(1L, 1, "john", "doe");
         when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
+        runTest(2L, "2", "1", "1", "1");
+        assertTrue(consoleOutput.contains("Enter new firt student name:"));
+    }
+    
+    @Test
+    void shouldDeleteStudents() throws SQLException, IOException {
+        Students student = new Students(1L, 1, "john", "doe");
+        when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
+        when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
+        studentsDao.deleteById(connection, 1L);
         runTest(2L, "2", "1", "1", "1");
         assertTrue(consoleOutput.contains("Enter new firt student name:"));
     }
