@@ -36,9 +36,9 @@ public class EditStudentScreen extends DynamicMenuScreen {
     private DynamicNavigationHandler createDynamicHandler(Datasource datasource, StudentDao studentDao) {
         return screenName -> {
             String[] parts = screenName.split("_");
-//            if (parts.length != 3) {
-//                throw new IllegalAccessError("createDynamicHandler");
-//            }
+            if (parts.length != 2 || !"editStudent".equals(parts[0])) {
+                return null;
+            }
             long id = Long.parseLong(parts[1]);
             return handleStudentById(screenName, id);
         };
@@ -51,8 +51,8 @@ public class EditStudentScreen extends DynamicMenuScreen {
             if (mayBeStudent.isEmpty()) {
                 throw new IllegalAccessError("handleStudentById");
             }
-            return new StaticMenuScreen(screenName, mayBeStudent.get().getFirstName() + " " + mayBeStudent.get().getLastName(),
-                    Arrays.asList(new StudentEditionAction(datasource, studentDao, mayBeStudent.get()), new StudentRemoveAction(datasource, studentDao, mayBeStudent.get())));
+            return new StaticMenuScreen(screenName, mayBeStudent.get().getFirstName(),
+                    Arrays.asList(new StudentEditionAction(datasource, studentDao, mayBeStudent.get())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -74,4 +74,5 @@ public class EditStudentScreen extends DynamicMenuScreen {
     public DynamicNavigationHandler getStudentEditScreenHandler() {
         return studentEditScreenHandler;
     }
+
 }

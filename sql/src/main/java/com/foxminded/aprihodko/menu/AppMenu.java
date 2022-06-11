@@ -55,10 +55,11 @@ public class AppMenu {
         StaticMenuScreen main = new StaticMenuScreen("main", "Main menu",
                 Arrays.asList(new NavigateAction(course), new NavigateAction(students), new NavigateAction(group)));
         Menu menu = new Menu(console, Arrays.asList(main, course, students, group, editGroups, editStudent, editCourse, deleteStudent),
-                Arrays.asList(editCourse.getCourseEditScreeenHandler(),
+                Arrays.asList(
                         editGroups.getGroupEditScreenHandler(),
                         editStudent.getStudentEditScreenHandler(),
-                        deleteStudent.getStudentDeleteScreenHandler()));
+                        deleteStudent.getStudentDeleteScreenHandler(),
+                        editCourse.getCourseEditScreeenHandler()));
         menu.show("main");
     }
     

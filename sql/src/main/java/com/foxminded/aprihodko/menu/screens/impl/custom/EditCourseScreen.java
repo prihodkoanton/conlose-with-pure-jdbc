@@ -36,7 +36,7 @@ public class EditCourseScreen extends DynamicMenuScreen {
         return screenName -> {
             String[] parts = screenName.split("_");
             if (parts.length != 2 || !"editCourse".equals(parts[0])) {
-                throw new IllegalAccessError("EditCourseScreen createDynamicHandler");
+                return null;
             }
             long id = Long.parseLong(parts[1]);
             return handleCourseById(screenName, id);
@@ -72,4 +72,5 @@ public class EditCourseScreen extends DynamicMenuScreen {
     public DynamicNavigationHandler getCourseEditScreeenHandler() {
         return courseNavigationHandler;
     }
+
 }
