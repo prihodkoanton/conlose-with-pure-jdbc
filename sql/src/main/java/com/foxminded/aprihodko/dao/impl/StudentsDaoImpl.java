@@ -19,7 +19,8 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
     public static final String UPDATE = "UPDATE school.students SET first_name = ?, last_name = ? where student_id = ?";
     public static final String DELETE_ONE = "DELETE FROM school.students WHERE student_id = ?";
     public static final String ASSGIN_COURSE_TO_STUDENT = "INSERT INTO school.student_courses(student_ref, course_ref) VALUES (?, ?)";
-    
+    public static final String FIND_ALL_STUDENTS_RELATED_TO_COURSE_WITH_GIVEN_NAME = "select s.* from school.students s left join school.student_courses sc on s.student_id = sc.student_ref left join school.courses c on c.course_id = sc.course_ref where c.course_name = ?";
+    public static final String REMOVE_THE_STUDENT_FROM_ONE_HIS_COURSE = "DELETE FROM school.student_courses WHERE student_ref = ? AND course_ref = ?";
     private final StudentsMapper mapper;
 
     public StudentsDaoImpl() {
@@ -125,18 +126,39 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
 
     @Override
     public void assignCourseToStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
-        try(PreparedStatement ps = connection.prepareStatement(ASSGIN_COURSE_TO_STUDENT)){
+        try (PreparedStatement ps = connection.prepareStatement(ASSGIN_COURSE_TO_STUDENT)) {
             ps.setLong(1, studentID);
             ps.setLong(2, courseID);
-            if(ps.executeUpdate() != 1) {
-                throw new SQLException("Unable assign course (id = " + courseID + ")" + " to student (id = " + studentID + ")");
+            if (ps.executeUpdate() != 1) {
+                throw new SQLException(
+                        "Unable assign course (id = " + courseID + ")" + " to student (id = " + studentID + ")");
+            }
+        }
+    }
+
+    public List<Students> findAllStudentRelatedToCourseWithGivenName(Connection connection, String courseName)
+            throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(FIND_ALL_STUDENTS_RELATED_TO_COURSE_WITH_GIVEN_NAME)) {
+            ps.setString(1, courseName);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Students> students = new ArrayList<>();
+                while (rs.next()) {
+                    students.add(mapper.apply(rs));
+                }
+                return students;
             }
         }
     }
 
     @Override
-    public void removeCourseFromStudent(Connection connection, Long studentID, Long courseID) throws SQLException {
-        // TODO Auto-generated method stub
-        
+    public void removeTheStudentFromOneHisCourse(Connection connection, Long studentID, Long courseID)
+            throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(REMOVE_THE_STUDENT_FROM_ONE_HIS_COURSE)) {
+            ps.setLong(1, studentID);
+            ps.setLong(2, courseID);
+            if (ps.executeUpdate() != 1) {
+                throw new SQLException("Unable to delete student (id = " + studentID + ") from his course (id = " + courseID + ")");
+            }
+        }
     }
 }

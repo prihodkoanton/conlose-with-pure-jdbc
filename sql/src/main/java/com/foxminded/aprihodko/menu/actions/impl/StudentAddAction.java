@@ -1,17 +1,12 @@
 package com.foxminded.aprihodko.menu.actions.impl;
 
-import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
 import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import com.foxminded.aprihodko.dao.StudentDao;
 import com.foxminded.aprihodko.dao.datasource.Datasource;
 import com.foxminded.aprihodko.menu.actions.ActionConstants;
-import com.foxminded.aprihodko.menu.console.Console;
 import com.foxminded.aprihodko.model.Students;
 
 public class StudentAddAction extends AbstractAction{

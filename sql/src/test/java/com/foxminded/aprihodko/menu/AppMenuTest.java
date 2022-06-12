@@ -107,11 +107,11 @@ class AppMenuTest {
     
     @Test
     void shouldAddStudents() throws SQLException, IOException {
-//        Students student = new Students(1L, 1, "john", "doe");
-//        when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
-//        when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
-//        studentsDao.save(connection, student);
-        runTest(2L, "2", "3");
+        runTest(2L, "2", "3", "1");
+        Students student = new Students(1L, 1, "john", "doe");
+        when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
+        when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
+        studentsDao.save(connection, student);
         assertTrue(consoleOutput.contains("Create first student name:"));
     }
 
