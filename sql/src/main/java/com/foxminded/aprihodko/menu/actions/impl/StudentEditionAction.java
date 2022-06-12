@@ -14,7 +14,7 @@ public class StudentEditionAction extends AbstractAction{
     
     public StudentEditionAction(Datasource datasource, StudentDao studentDao, Students student) {
         super("Edit student " + student.getFirstName() +" "+ student.getLastName(), console -> {
-            String newFirstName = console.askForString("Enter new firt student name");
+            String newFirstName = console.askForString("Enter new first student name");
             String newLastName = console.askForString("Enter new last student name");
             if(!newFirstName.isEmpty() && !newLastName.isEmpty()) {
                 student.setFirstName(newFirstName);
@@ -26,7 +26,7 @@ public class StudentEditionAction extends AbstractAction{
                 }
                 return ActionConstants.BACK;
             }
-            return "";
+            return "students";
         });
         this.datasource = datasource;
         this.studentDao = studentDao;

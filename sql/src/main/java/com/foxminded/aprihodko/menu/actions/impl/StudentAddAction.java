@@ -20,7 +20,7 @@ public class StudentAddAction extends AbstractAction{
 
     public StudentAddAction(Datasource datasource, StudentDao studentDao) {
         super("Add new student ", console -> {
-            String newFirstName = console.askForString("Create firt student name");
+            String newFirstName = console.askForString("Create first student name");
             String newLastName = console.askForString("Create last student name");
             String groupdId = console.askForString("Enter group_id for student");
             if(!newFirstName.isEmpty() && !newLastName.isEmpty() && !groupdId.isEmpty()) {

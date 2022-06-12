@@ -92,7 +92,7 @@ class AppMenuTest {
         when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
         runTest(2L, "2", "1", "1", "1");
-        assertTrue(consoleOutput.contains("Enter new firt student name:"));
+        assertTrue(consoleOutput.contains("Enter new first student name:"));
     }
     
     @Test
@@ -101,8 +101,18 @@ class AppMenuTest {
         when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
         studentsDao.deleteById(connection, 1L);
-        runTest(2L, "2", "1", "1", "1");
-        assertTrue(consoleOutput.contains("Enter new firt student name:"));
+        runTest(2L, "2", "2", "1");
+        assertTrue(consoleOutput.contains("Delete student john doe with id: '1'"));
+    }
+    
+    @Test
+    void shouldAddStudents() throws SQLException, IOException {
+//        Students student = new Students(1L, 1, "john", "doe");
+//        when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
+//        when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
+//        studentsDao.save(connection, student);
+        runTest(2L, "2", "3");
+        assertTrue(consoleOutput.contains("Create first student name:"));
     }
 
     @Test
