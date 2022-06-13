@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -114,6 +115,17 @@ class AppMenuTest {
         studentsDao.save(connection, student);
         assertTrue(consoleOutput.contains("Create first student name:"));
     }
+    
+    @Test
+    void shouldRemoveTheStudentFromOneHisCourse () throws SQLException, IOException{
+        Students student = new Students(1L, 1, "john", "doe");
+        Course course = new Course(1L, "course", "course description");
+        studentsDao.assignCourseToStudent(connection, student.getId(), course.getId());
+        when(studentsDao.findByCourseId(connection, course.getId())).thenReturn(Arrays.asList(student));
+        studentsDao.removeTheStudentFromOneHisCourse(connection, student.getId(), course.getId());
+        runTest(2L, "2", "5");
+        assertTrue(consoleOutput.contains("Enter student id:"));
+    }
 
     @Test
     void shouldEditGroups() throws SQLException, IOException {
@@ -121,7 +133,6 @@ class AppMenuTest {
         when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
         when(groupDao.findById(connection, 1L)).thenReturn(Optional.of(group));
         runTest(2L, "3", "1", "1", "1");
-        // debug output, remove when test is green
         System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Enter new group name:"));
     }

@@ -73,7 +73,7 @@ public class AppMenu {
                 Arrays.asList(new NavigateAction(editGroups.getTitle(), editGroups.getName()),
                         new AbstractAction("Find all Groups", (console) -> findAllGroups(console)),
                         new AbstractAction("Find all groups with less or equals student count",
-                                (console) -> findAllGroupsWithLessStudents(console))));
+                                (console) -> findAllGroupsWithLessOrEqualsStudentCount(console))));
     }
 
     private MenuScreen menuScreenForStudents(EditStudentScreen editStudent, DeleteStudentScreen deleteStuden) {
@@ -129,10 +129,6 @@ public class AppMenu {
         }
     }
 
-    private String findAllGroupsWithLessStudents(Console console) {
-        return null;
-    }
-
     private String findAllStudentsRelatedToCourseWithGivenName(Console console) {
         try {
             List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
@@ -148,6 +144,7 @@ public class AppMenu {
             String result = students.stream().map(student -> String.format("%2d) %s %s", count.incrementAndGet(),
                     student.getFirstName(), student.getLastName())).collect(Collectors.joining("\n"));
             console.println(result);
+            
             return "students";
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -160,6 +157,19 @@ public class AppMenu {
             String course_id = console.askForString("Enter course id");
             inTransaction(datasource, connetction -> studentsDao.removeTheStudentFromOneHisCourse(connetction, Long.valueOf(student_id), Long.valueOf(course_id)));
             return "students";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    private String findAllGroupsWithLessOrEqualsStudentCount(Console console) {
+        try {
+            String countOfStudents = console.askForString("Enter count of students");
+            List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAllGroupsWithLessOrEqualsStudentCount(connection, Integer.parseInt(countOfStudents)));
+            AtomicInteger count = new AtomicInteger();
+            String result = groups.stream().map(group -> String.format("%2d) %s", count, group.getName())).collect(Collectors.joining("\n"));
+            console.println(result);
+            return "groups";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
