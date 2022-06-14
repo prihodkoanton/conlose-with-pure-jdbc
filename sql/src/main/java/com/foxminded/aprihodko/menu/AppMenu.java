@@ -93,7 +93,6 @@ public class AppMenu {
             AtomicInteger count = new AtomicInteger();
             String result = students.stream().map(student -> String.format("%2d) %s %s", count.incrementAndGet(),
                     student.getFirstName(), student.getLastName())).collect(Collectors.joining("\n"));
-            String counts = String.valueOf(students.size());
             console.println(result);
             return "students";
         } catch (SQLException e) {
