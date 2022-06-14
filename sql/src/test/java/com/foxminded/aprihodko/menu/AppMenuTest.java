@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testcontainers.shaded.com.github.dockerjava.core.dockerfile.DockerfileStatement.Add;
 
 import com.foxminded.aprihodko.dao.CourseDao;
 import com.foxminded.aprihodko.dao.GroupDao;
@@ -86,6 +88,15 @@ class AppMenuTest {
         runTest(2L, "1", "1", "1", "1");
         assertTrue(consoleOutput.contains("Edit course 'course' with dicreption: 'course description'"));
     }
+    
+    @Test
+    void shouldReturnAllCourses() throws SQLException, IOException{
+        Course course = new Course(1L, "course", "course description");
+        when(courseDao.findAll(connection)).thenReturn(Arrays.asList(course));
+        when(courseDao.findById(connection, 1L)).thenReturn(Optional.of(course));
+        runTest(2L, "1", "2", "2");
+        assertTrue(consoleOutput.contains("course course description"));
+    }
 
     @Test
     void shouldEditStudents() throws SQLException, IOException {
@@ -108,12 +119,17 @@ class AppMenuTest {
     
     @Test
     void shouldAddStudents() throws SQLException, IOException {
-        runTest(2L, "2", "3", "1");
+        runTest(2L, "2", "3");
+        assertTrue(consoleOutput.contains("Create first student name:"));
+    }
+    
+    @Test
+    void shouldFindAllStudentsRelatedToCourseWithGivenName() throws SQLException, IOException{
         Students student = new Students(1L, 1, "john", "doe");
         when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
-        studentsDao.save(connection, student);
-        assertTrue(consoleOutput.contains("Create first student name:"));
+        runTest(2L, "2", "4");
+        assertTrue(consoleOutput.contains("Enter course name:"));
     }
     
     @Test
@@ -126,6 +142,16 @@ class AppMenuTest {
         runTest(2L, "2", "5");
         assertTrue(consoleOutput.contains("Enter student id:"));
     }
+    
+    @Test
+    void shouldReturnAllStudents () throws SQLException, IOException{
+        Students student = new Students(1L, 1, "john", "doe");
+        when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
+        when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
+        runTest(2L, "2","6");
+        System.out.println(consoleOutput);
+        assertTrue(consoleOutput.contains("john doe"));
+    }
 
     @Test
     void shouldEditGroups() throws SQLException, IOException {
@@ -135,6 +161,21 @@ class AppMenuTest {
         runTest(2L, "3", "1", "1", "1");
         System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Enter new group name:"));
+    }
+    
+    @Test
+    void shouldReturnAllGroups() throws SQLException, IOException{
+        Group group = new Group(1L, "group");
+        when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
+        when(groupDao.findById(connection, 1L)).thenReturn(Optional.of(group));
+        runTest(2L, "3", "2");
+        System.out.println(consoleOutput);
+        assertTrue(consoleOutput.contains(""));
+    }
+    
+    @Test
+    void shouldFindAllGroupsWithLessOrEqualsStudentCount() throws SQLException, IOException{
+        
     }
 
     private Exception runTest(Long timeoutSeconds, String... args) throws IOException {

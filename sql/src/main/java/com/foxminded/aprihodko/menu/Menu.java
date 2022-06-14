@@ -56,7 +56,8 @@ public class Menu {
         int option = console.askForInteger("Select option", 0, screen.getActions().size());
         Action next = option == 0 ? exitAction : screen.getActions().get(option - 1);
 
-        switch (next.apply(console)) {
+        String nextScreenName = next.apply(console);
+        switch (nextScreenName) {
             case ActionConstants.BACK:
                 play(this.breadCrumbs.pop());
                 break;
@@ -64,7 +65,7 @@ public class Menu {
                 break;
             default:
                 this.breadCrumbs.push(screen);
-                show(next.apply(console));
+                show(nextScreenName);
         }
     }
 

@@ -84,10 +84,10 @@ public class AppMenu {
                         new AbstractAction("Find all students related to course with given name",
                                 (console) -> findAllStudentsRelatedToCourseWithGivenName(console)),
                         new AbstractAction("Remove the student from one his course", (console) -> removeTheStudentFromOneHisCourse(console)),
-                        new AbstractAction("Find all Students", (console) -> findAllStudents(console))));
+                        new AbstractAction("Find all Students", console -> findAllStudents())));
     }
 
-    private String findAllStudents(Console console) {
+    private String findAllStudents() {
         try {
             List<Students> students = fromTransaction(datasource, connection -> studentsDao.findAll(connection));
             AtomicInteger count = new AtomicInteger();
