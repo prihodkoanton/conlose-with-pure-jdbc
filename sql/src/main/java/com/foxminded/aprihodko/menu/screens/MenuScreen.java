@@ -17,6 +17,7 @@ public interface MenuScreen {
     
     default String render(List<MenuScreen> history, Action exitAction) {
         StringBuffer sb = new StringBuffer();
+        // TODO history must be shown in reverse order
         String menuTitle = Stream.concat(history.stream(), Stream.of(this))
                 .map(MenuScreen::getTitle)
                 .collect(Collectors.joining(" -> "));
