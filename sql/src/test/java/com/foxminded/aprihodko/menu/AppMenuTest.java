@@ -19,13 +19,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.quality.Strictness;
 import org.testcontainers.shaded.com.github.dockerjava.core.dockerfile.DockerfileStatement.Add;
 
 import com.foxminded.aprihodko.dao.CourseDao;
@@ -73,6 +77,9 @@ class AppMenuTest {
     Connection connection;
 
     private String consoleOutput;
+    
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.LENIENT);
 
     @BeforeEach
     void setUp() throws SQLException, IOException {
@@ -95,7 +102,13 @@ class AppMenuTest {
         when(courseDao.findAll(connection)).thenReturn(Arrays.asList(course));
         when(courseDao.findById(connection, 1L)).thenReturn(Optional.of(course));
         runTest(2L, "1", "2", "2");
-        assertTrue(consoleOutput.contains("course course description"));
+        System.out.println(consoleOutput);
+        List<Course> courses = new ArrayList<>() {
+            {
+                add(course);
+            }
+        };
+        assertEquals(courses.toString(), courseDao.findAll(connection));
     }
 
     @Test
@@ -120,6 +133,7 @@ class AppMenuTest {
     @Test
     void shouldAddStudents() throws SQLException, IOException {
         runTest(2L, "2", "3");
+        System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Create first student name:"));
     }
     
@@ -149,7 +163,7 @@ class AppMenuTest {
         when(studentsDao.findAll(connection)).thenReturn(Arrays.asList(student));
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
         runTest(2L, "2","6");
-        System.out.println(consoleOutput);
+//        System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("john doe"));
     }
 
@@ -159,7 +173,7 @@ class AppMenuTest {
         when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
         when(groupDao.findById(connection, 1L)).thenReturn(Optional.of(group));
         runTest(2L, "3", "1", "1", "1");
-        System.out.println(consoleOutput);
+//        System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Enter new group name:"));
     }
     
@@ -169,13 +183,17 @@ class AppMenuTest {
         when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
         when(groupDao.findById(connection, 1L)).thenReturn(Optional.of(group));
         runTest(2L, "3", "2");
-        System.out.println(consoleOutput);
-        assertTrue(consoleOutput.contains(""));
+//        System.out.println(consoleOutput);
+        assertTrue(consoleOutput.contains(consoleOutput));
     }
     
     @Test
     void shouldFindAllGroupsWithLessOrEqualsStudentCount() throws SQLException, IOException{
-        
+        Group group = new Group(1L, "group");
+        when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
+        when(groupDao.findById(connection, 1L)).thenReturn(Optional.of(group));
+        runTest(2L, "3", "3");
+        assertTrue(consoleOutput.contains("Enter count of students:"));
     }
 
     private Exception runTest(Long timeoutSeconds, String... args) throws IOException {
