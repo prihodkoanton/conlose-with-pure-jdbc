@@ -125,7 +125,7 @@ class AppMenuTest {
         Students student = new Students(1L, 1, "john", "doe");
         studentsDao.save(connection, student);
         when(studentsDao.findById(connection, 1L)).thenReturn(Optional.of(student));
-        runTest(2L, "2", "3");
+        runTest(2L, "2", "3", "john");
         System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Create first student name:"));
     }
@@ -135,7 +135,7 @@ class AppMenuTest {
         Students student = new Students(1L, 1, "john", "doe");
         Course course = new Course(1L, "course", "course description");
         studentsDao.assignCourseToStudent(connection, student.getId(), course.getId());
-        runTest(2L, "2", "4");
+        runTest(2L, "2", "4", "test");
         assertTrue(consoleOutput.contains("Enter course name:"));
     }
     
@@ -177,16 +177,16 @@ class AppMenuTest {
         assertTrue(consoleOutput.contains(consoleOutput));
     }
     
-//    @Test
-//    void shouldFindAllGroupsWithLessOrEqualsStudentCount() throws SQLException, IOException{
-//        Group group = new Group(1L, "group");
-//        Students student = new Students(1L, 1, "john", "doe");
-//        studentsDao.save(connection, student);
-//        when(groupDao.findAll(connection)).thenReturn(Arrays.asList(group));
-//        when(groupDao.findAllGroupsWithLessOrEqualsStudentCount(connection, 1)).thenReturn(Arrays.asList(group));
-//        runTest(2L, "3", "3");
-//        assertTrue(consoleOutput.contains("Enter count of students:"));
-//    }
+    @Test
+    void shouldFindAllGroupsWithLessOrEqualsStudentCount() throws SQLException, IOException{
+        Group group = new Group(1L, "group");
+        Students student = new Students(1L, 1, "john", "doe");
+        studentsDao.save(connection, student);
+        groupDao.save(connection, group);
+        runTest(2L, "3", "3", "1");
+        System.out.println(consoleOutput);
+        assertTrue(consoleOutput.contains("Enter count of students:"));
+    }
 
     private Exception runTest(Long timeoutSeconds, String... args) throws IOException {
         for (String arg : args) {
