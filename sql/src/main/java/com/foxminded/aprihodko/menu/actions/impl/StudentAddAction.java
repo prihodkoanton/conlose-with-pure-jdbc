@@ -19,7 +19,7 @@ public class StudentAddAction extends AbstractAction{
             String newLastName = console.askForString("Create last student name");
             String groupdId = console.askForString("Enter group_id for student");
             if(!newFirstName.isEmpty() && !newLastName.isEmpty() && !groupdId.isEmpty()) {
-                Students student = new Students(Long.valueOf(groupdId), newFirstName, newLastName);
+                Students student = new Students(Integer.valueOf(groupdId), newFirstName, newLastName);
                 try {
                     inTransaction(datasource, connection -> studentDao.save(connection, student));
                 } catch (SQLException e) {
