@@ -8,8 +8,11 @@ import com.github.javafaker.Faker;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeSet;
 
 public class GenerateStudents {
 
@@ -34,24 +37,19 @@ public class GenerateStudents {
         int countOfStudents;
         Random random = new Random();
         int randomGroupId;
-        int countOfGroups;
         for (int j = 0; j < count; j++) {
             countOfStudents = countOfStudentsInOneGroup();
-            randomGroupId = 1 + random.nextInt(groupCount);
             for (int i = 0; i < countOfStudents; i++) {
+                randomGroupId = 1 + random.nextInt(groupCount);
                 if (students.size() < count) {
-                    countOfGroups = randomGroupId;
-                    if (countOfGroups <= 30) {
-                        students.add(studentDao.save(connection,
-                                new Students(randomGroupId, fake.firstName(), fake.lastName())));
-                    }
+                    students.add(studentDao.save(connection, new Students(randomGroupId, fake.firstName(), fake.lastName())));
                 }
             }
         }
         return students;
     }
 
-    private static int countOfStudentsInOneGroup() {
+    private int countOfStudentsInOneGroup() {
         final int minStudentPerGroup = 10;
         final int maxStudentPerGroup = 30;
         Random random = new Random();
