@@ -137,7 +137,6 @@ class AppMenuTest {
     void shouldRemoveTheStudentFromOneHisCourse() throws SQLException, IOException {
         runTest(2L, "2", "5", "12", "123");
         verify(studentsDao).removeTheStudentFromOneHisCourse(any(Connection.class), eq(12L), eq(123L));
-        System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Enter student id:"));
     }
 
@@ -173,7 +172,6 @@ class AppMenuTest {
         studentsDao.save(connection, student);
         groupDao.save(connection, group);
         runTest(2L, "3", "3", "1");
-        System.out.println(consoleOutput);
         assertTrue(consoleOutput.contains("Enter count of students:"));
     }
 
