@@ -21,7 +21,7 @@ public class GroupDaoImpl extends AbstractCrudDao<Group, Long> implements GroupD
     public static final String INSERT_ONE = "INSERT INTO school.groups(group_name) VALUES (?)";
     public static final String UPDATE = "UPDATE school.groups SET group_name = ? where group_id = ?";
     public static final String DELETE_ONE = "DELETE FROM school.groups WHERE group_id = ?";
-    public static final String FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENT_COUNT = "";
+    public static final String FIND_ALL_GROUPS_WITH_LESS_OR_EQUALS_STUDENT_COUNT = "SELECT  COUNT(student_id) StudentCount, b.group_id, b.group_name FROM school.students a INNER JOIN school.groups b ON a.group_id = b.group_id WHERE student_id <= ? GROUP BY b.group_id, b.group_name";
 
     private final GroupMapper mapper;
 
