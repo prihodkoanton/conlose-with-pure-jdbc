@@ -8,15 +8,15 @@ import com.foxminded.aprihodko.menu.actions.ActionConstants;
 import com.foxminded.aprihodko.model.Course;
 import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
-public class CourseEditAction extends AbstractAction{
+public class CourseEditAction extends AbstractAction {
     private Datasource datasource;
     private CourseDao courseDao;
-    
+
     public CourseEditAction(Datasource datasource, CourseDao courseDao, Course course) {
-        super("Edit course '" + course.getName() + "' with dicreption: '" + course.getDescription() +"'", (console -> {
+        super("Edit course '" + course.getName() + "' with dicreption: '" + course.getDescription() + "'", (console -> {
             String newName = console.askForString("Enter new course name");
             String newDiscription = console.askForString("Enter new course discription");
-            if (!newName.isEmpty() && !newDiscription.isEmpty()){
+            if (!newName.isEmpty() && !newDiscription.isEmpty()) {
                 course.setName(newName);
                 course.setDescription(newDiscription);
                 try {

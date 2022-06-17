@@ -11,6 +11,7 @@ public class StudentsMapper implements Mapper<Students> {
 
     @Override
     public Students apply(ResultSet rSet) throws SQLException {
-        return new Students(rSet.getLong(STUDENT_ID), rSet.getInt(GROUP_ID), rSet.getString(FIRRST_NAME), rSet.getString(LAST_NAME));
+        return new Students(rSet.getLong(STUDENT_ID), rSet.getInt(GROUP_ID), rSet.getString(FIRRST_NAME),
+                rSet.getString(LAST_NAME));
     }
 }

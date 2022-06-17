@@ -14,14 +14,15 @@ public class StudentRemoveAction extends AbstractAction {
     private final StudentDao studentDao;
 
     public StudentRemoveAction(Datasource datasource, StudentDao studentDao, Students student) {
-        super("Delete student " + student.getFirstName() + " " + student.getLastName() + " with id: '" + student.getId() +"'", console -> {
-                try {
-                    inTransaction(datasource, connection -> studentDao.deleteById(connection, student.getId()));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                return ActionConstants.BACK;
-        });
+        super("Delete student " + student.getFirstName() + " " + student.getLastName() + " with id: '" + student.getId()
+                + "'", console -> {
+                    try {
+                        inTransaction(datasource, connection -> studentDao.deleteById(connection, student.getId()));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return ActionConstants.BACK;
+                });
         this.datasource = datasource;
         this.studentDao = studentDao;
     }

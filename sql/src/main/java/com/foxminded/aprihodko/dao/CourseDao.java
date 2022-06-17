@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface CourseDao extends CrudDao<Course, Long> {
     Optional<Course> findByName(Connection connection, String name) throws SQLException;
-    List<Course> findByStudentId(Connection connection, Long id)throws SQLException;
-    
+
+    List<Course> findByStudentId(Connection connection, Long id) throws SQLException;
 }

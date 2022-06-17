@@ -51,9 +51,8 @@ public class EditGroupScreen extends DynamicMenuScreen {
                 return null;
             }
 
-            return new StaticMenuScreen(screenName, maybeGroup.get().getName(), Arrays.asList(
-                    new GroupEditAction(datasource, groupDao, maybeGroup.get()))
-            );
+            return new StaticMenuScreen(screenName, maybeGroup.get().getName(),
+                    Arrays.asList(new GroupEditAction(datasource, groupDao, maybeGroup.get())));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,8 +62,7 @@ public class EditGroupScreen extends DynamicMenuScreen {
     public List<Action> getActions() {
         try {
             List<Group> groups = fromTransaction(datasource, groupDao::findAll);
-            return groups.stream().map(group -> new NavigateAction(group.getName(),
-                            "editGroup_" + group.getId()))
+            return groups.stream().map(group -> new NavigateAction(group.getName(), "editGroup_" + group.getId()))
                     .collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();

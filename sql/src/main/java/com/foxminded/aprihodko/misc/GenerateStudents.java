@@ -42,7 +42,8 @@ public class GenerateStudents {
             for (int i = 0; i < countOfStudents; i++) {
                 randomGroupId = 1 + random.nextInt(groupCount);
                 if (students.size() < count) {
-                    students.add(studentDao.save(connection, new Students(randomGroupId, fake.firstName(), fake.lastName())));
+                    students.add(studentDao.save(connection,
+                            new Students(randomGroupId, fake.firstName(), fake.lastName())));
                 }
             }
         }

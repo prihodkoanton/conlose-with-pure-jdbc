@@ -12,13 +12,13 @@ public class Students extends LongEntity {
     private String lastName;
     private int groupID;
 
-    public Students(Long id, int groupID,  String firstName, String lastName) {
+    public Students(Long id, int groupID, String firstName, String lastName) {
         super(id);
         this.groupID = groupID;
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    
+
     public Students(Long id, String firstName, String lastName) {
         super(id);
         this.firstName = firstName;
@@ -44,7 +44,7 @@ public class Students extends LongEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+
     public int getGroupID() {
         return groupID;
     }

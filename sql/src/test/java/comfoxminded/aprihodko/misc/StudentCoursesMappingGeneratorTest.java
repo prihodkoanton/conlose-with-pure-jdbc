@@ -23,7 +23,7 @@ import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 class StudentCoursesMappingGeneratorTest extends DaoTestBaseClass {
 
-    public static final int COURSE_COUNT = 10;
+    public static final int COUNT_OF_COURSE = 10;
     public static final int COUNT_OF_STUDENTS = 10;
     public static final int MIN_COURSE_COUNT = 3;
     public static final int MAX_COURSE_COUNT = 5;
@@ -33,7 +33,7 @@ class StudentCoursesMappingGeneratorTest extends DaoTestBaseClass {
         CourseDao courseDao = new CourseDaoImpl();
         StudentDao studentDao = new StudentsDaoImpl();
         inTransaction(datasource, connection -> {
-            new GenerateCourses(courseDao).generateDate(connection, COURSE_COUNT);
+            new GenerateCourses(courseDao).generateDate(connection, COUNT_OF_COURSE);
             new GenerateStudents(studentDao).generateData(connection, COUNT_OF_STUDENTS);
             new StudentCoursesMappingGenerator(studentDao, courseDao).mapStudentsToCourses(connection, MIN_COURSE_COUNT,
                     MAX_COURSE_COUNT);
@@ -54,16 +54,14 @@ class StudentCoursesMappingGeneratorTest extends DaoTestBaseClass {
     void shouldReturnException() throws SQLException {
         CourseDao courseDao = new CourseDaoImpl();
         StudentDao studentDao = new StudentsDaoImpl();
-        inTransaction(datasource, connection -> {
-            new GenerateCourses(courseDao).generateDate(connection, 1);
-            new StudentCoursesMappingGenerator(studentDao, courseDao).mapStudentsToCourses(connection, COURSE_COUNT,
-                    COUNT_OF_STUDENTS);
-        });
-        
-        inTransaction(datasource, connetction ->{
+
+        inTransaction(datasource, connetction -> {
+            new GenerateCourses(courseDao).generateDate(connetction, COUNT_OF_COURSE);
+            new GenerateStudents(studentDao).generateData(connetction, COUNT_OF_STUDENTS);
             StudentCoursesMappingGenerator mappingGenerator = new StudentCoursesMappingGenerator(studentDao, courseDao);
-            Exception e = assertThrows(RuntimeException.class,() -> inTransaction(datasource, connection -> mappingGenerator.mapStudentsToCourses(connection, 50, 100)));
-            assertEquals("", e.getMessage());
+            Exception e = assertThrows(SQLException.class, () -> inTransaction(datasource,
+                    connection -> mappingGenerator.mapStudentsToCourses(connection, 50, 10)));
+            assertEquals("Exception in transaction", e.getMessage());
         });
     }
 }

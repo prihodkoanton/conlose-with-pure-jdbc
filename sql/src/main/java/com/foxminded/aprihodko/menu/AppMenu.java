@@ -83,7 +83,8 @@ public class AppMenu {
                         new StudentAddAction(datasource, studentsDao),
                         new AbstractAction("Find all students related to course with given name",
                                 (console) -> findAllStudentsRelatedToCourseWithGivenName(console)),
-                        new AbstractAction("Remove the student from one his course", (console) -> removeTheStudentFromOneHisCourse(console)),
+                        new AbstractAction("Remove the student from one his course",
+                                (console) -> removeTheStudentFromOneHisCourse(console)),
                         new AbstractAction("Find all Students", console -> findAllStudents())));
     }
 
@@ -133,7 +134,7 @@ public class AppMenu {
             List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
             String courseName = console.askForString("Enter course name");
             List<String> coursesName = new ArrayList<>();
-            for (int i =0; i < courses.size(); i++) {
+            for (int i = 0; i < courses.size(); i++) {
                 coursesName.add(courses.get(i).getName());
             }
             if (!coursesName.contains(courseName)) {
@@ -150,24 +151,28 @@ public class AppMenu {
             throw new RuntimeException(e);
         }
     }
-    
+
     private String removeTheStudentFromOneHisCourse(Console console) {
         try {
             String student_id = console.askForString("Enter student id");
             String course_id = console.askForString("Enter course id");
-            inTransaction(datasource, connetction -> studentsDao.removeTheStudentFromOneHisCourse(connetction, Long.valueOf(student_id), Long.valueOf(course_id)));
+            inTransaction(datasource, connetction -> studentsDao.removeTheStudentFromOneHisCourse(connetction,
+                    Long.valueOf(student_id), Long.valueOf(course_id)));
             return "students";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     private String findAllGroupsWithLessOrEqualsStudentCount(Console console) {
         try {
             String countOfStudents = console.askForString("Enter count of students");
-            List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAllGroupsWithLessOrEqualsStudentCount(connection, Integer.parseInt(countOfStudents)));
+            List<Group> groups = fromTransaction(datasource, connection -> groupDao
+                    .findAllGroupsWithLessOrEqualsStudentCount(connection, Integer.parseInt(countOfStudents)));
             AtomicInteger count = new AtomicInteger();
-            String result = groups.stream().map(group -> String.format("%2d) %s", count.incrementAndGet(), group.getName())).collect(Collectors.joining("\n"));
+            String result = groups.stream()
+                    .map(group -> String.format("%2d) %s", count.incrementAndGet(), group.getName()))
+                    .collect(Collectors.joining("\n"));
             console.println(result);
             return "groups";
         } catch (Exception e) {

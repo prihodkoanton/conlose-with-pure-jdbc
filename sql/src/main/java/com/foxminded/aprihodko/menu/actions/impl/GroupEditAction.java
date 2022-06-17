@@ -8,7 +8,7 @@ import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 import java.sql.SQLException;
 
-public class GroupEditAction extends AbstractAction{
+public class GroupEditAction extends AbstractAction {
     private final Datasource datasource;
     private final GroupDao groupDaoImpl;
 

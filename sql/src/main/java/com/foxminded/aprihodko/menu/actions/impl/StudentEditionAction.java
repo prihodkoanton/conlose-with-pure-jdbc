@@ -8,15 +8,15 @@ import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 import java.sql.SQLException;
 
-public class StudentEditionAction extends AbstractAction{
+public class StudentEditionAction extends AbstractAction {
     private final Datasource datasource;
     private final StudentDao studentDao;
-    
+
     public StudentEditionAction(Datasource datasource, StudentDao studentDao, Students student) {
-        super("Edit student " + student.getFirstName() +" "+ student.getLastName(), console -> {
+        super("Edit student " + student.getFirstName() + " " + student.getLastName(), console -> {
             String newFirstName = console.askForString("Enter new first student name");
             String newLastName = console.askForString("Enter new last student name");
-            if(!newFirstName.isEmpty() && !newLastName.isEmpty()) {
+            if (!newFirstName.isEmpty() && !newLastName.isEmpty()) {
                 student.setFirstName(newFirstName);
                 student.setLastName(newLastName);
                 try {

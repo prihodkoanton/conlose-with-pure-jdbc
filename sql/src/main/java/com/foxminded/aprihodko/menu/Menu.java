@@ -20,12 +20,9 @@ public class Menu {
 
     private final List<DynamicNavigationHandler> dynamicNavigationHandlers;
 
-
     public Menu(Console console, List<MenuScreen> screens, List<DynamicNavigationHandler> dynamicNavigationHandlers) {
         this.console = console;
-        this.screens = screens.stream().collect(Collectors.toMap(
-                MenuScreen::getName, it -> it
-        ));
+        this.screens = screens.stream().collect(Collectors.toMap(MenuScreen::getName, it -> it));
         this.dynamicNavigationHandlers = dynamicNavigationHandlers;
         breadCrumbs = new LinkedList<>();
     }
@@ -58,14 +55,14 @@ public class Menu {
 
         String nextScreenName = next.apply(console);
         switch (nextScreenName) {
-            case ActionConstants.BACK:
-                play(this.breadCrumbs.pop());
-                break;
-            case ActionConstants.EXIT:
-                break;
-            default:
-                this.breadCrumbs.push(screen);
-                show(nextScreenName);
+        case ActionConstants.BACK:
+            play(this.breadCrumbs.pop());
+            break;
+        case ActionConstants.EXIT:
+            break;
+        default:
+            this.breadCrumbs.push(screen);
+            show(nextScreenName);
         }
     }
 

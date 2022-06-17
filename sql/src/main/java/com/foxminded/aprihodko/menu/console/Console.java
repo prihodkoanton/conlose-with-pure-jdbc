@@ -2,16 +2,16 @@ package com.foxminded.aprihodko.menu.console;
 
 import java.io.Closeable;
 
-public interface Console extends Closeable{
-    
+public interface Console extends Closeable {
+
     String EOL = "\n";
-    
+
     void print(String text);
-    
+
     void println(String text);
-    
+
     String askForString(String prompt);
-    
+
     default Integer askForInteger(String prompt) {
         do {
             String input = askForString(prompt);
@@ -22,7 +22,7 @@ public interface Console extends Closeable{
             }
         } while (true);
     }
-    
+
     default Integer askForInteger(String prompt, int min, int max) {
         do {
             int input = askForInteger(String.format("%s(%d...%d)", prompt, min, max));

@@ -9,7 +9,7 @@ import com.foxminded.aprihodko.dao.datasource.Datasource;
 import com.foxminded.aprihodko.menu.actions.ActionConstants;
 import com.foxminded.aprihodko.model.Students;
 
-public class StudentAddAction extends AbstractAction{
+public class StudentAddAction extends AbstractAction {
     private static Datasource datasource;
     private static StudentDao studentDao;
 
@@ -18,7 +18,7 @@ public class StudentAddAction extends AbstractAction{
             String newFirstName = console.askForString("Create first student name");
             String newLastName = console.askForString("Create last student name");
             String groupdId = console.askForString("Enter group_id for student");
-            if(!newFirstName.isEmpty() && !newLastName.isEmpty() && !groupdId.isEmpty()) {
+            if (!newFirstName.isEmpty() && !newLastName.isEmpty() && !groupdId.isEmpty()) {
                 Students student = new Students(Integer.valueOf(groupdId), newFirstName, newLastName);
                 try {
                     inTransaction(datasource, connection -> studentDao.save(connection, student));

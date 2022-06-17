@@ -20,23 +20,23 @@ import com.foxminded.aprihodko.menu.screens.impl.DynamicMenuScreen;
 import com.foxminded.aprihodko.menu.screens.impl.StaticMenuScreen;
 import com.foxminded.aprihodko.model.Students;
 
-public class DeleteStudentScreen extends DynamicMenuScreen{
-    
+public class DeleteStudentScreen extends DynamicMenuScreen {
+
     private final Datasource datasource;
     private final StudentDao studentDao;
-    
+
     private final DynamicNavigationHandler studentDeleteScreenHandler;
-    
+
     public DeleteStudentScreen(Datasource datasource, StudentDao studentDao) {
         super("deleteSsudent", "Delete student");
         this.datasource = datasource;
         this.studentDao = studentDao;
-        studentDeleteScreenHandler = createDynamicHabdler(datasource, studentDao); 
+        studentDeleteScreenHandler = createDynamicHabdler(datasource, studentDao);
     }
 
     private DynamicNavigationHandler createDynamicHabdler(Datasource datasource, StudentDao studentDao) {
-        return screenName ->{
-            String [] parts = screenName.split("_");
+        return screenName -> {
+            String[] parts = screenName.split("_");
             if (parts.length != 2 || !"deleteStudent".equals(parts[0])) {
                 return null;
             }
@@ -44,14 +44,16 @@ public class DeleteStudentScreen extends DynamicMenuScreen{
             return handleStudentById(screenName, id);
         };
     }
-    
+
     private MenuScreen handleStudentById(String screenName, long id) {
         try {
-            Optional<Students> mayBeStudent = fromTransaction(datasource, connection -> studentDao.findById(connection, id));
-            if(mayBeStudent.isEmpty()) {
+            Optional<Students> mayBeStudent = fromTransaction(datasource,
+                    connection -> studentDao.findById(connection, id));
+            if (mayBeStudent.isEmpty()) {
                 throw new IllegalArgumentException("The student with id: '" + id + "' does not exist");
             }
-            return new StaticMenuScreen(screenName, mayBeStudent.get().getFirstName() + " " + mayBeStudent.get().getLastName(),
+            return new StaticMenuScreen(screenName,
+                    mayBeStudent.get().getFirstName() + " " + mayBeStudent.get().getLastName(),
                     Arrays.asList(new StudentRemoveAction(datasource, studentDao, mayBeStudent.get())));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -63,7 +65,8 @@ public class DeleteStudentScreen extends DynamicMenuScreen{
         try {
             List<Students> students = fromTransaction(datasource, studentDao::findAll);
             return students.stream()
-                    .map(student -> new NavigateAction(student.getFirstName() + " " + student.getLastName(), "deleteStudent_" + student.getId()))
+                    .map(student -> new NavigateAction(student.getFirstName() + " " + student.getLastName(),
+                            "deleteStudent_" + student.getId()))
                     .collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();

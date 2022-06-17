@@ -19,7 +19,8 @@ public class TransactionUtils {
         }
     }
 
-    public static <T> T fromTransaction(Datasource datasource, ConnectionConsumerWithResult<T> consumer) throws SQLException {
+    public static <T> T fromTransaction(Datasource datasource, ConnectionConsumerWithResult<T> consumer)
+            throws SQLException {
         try (Connection connection = datasource.getConnection()) {
             connection.setAutoCommit(false);
             try {

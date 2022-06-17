@@ -49,6 +49,5 @@ public class Group extends LongEntity {
     public String toString() {
         return "Group [name=" + name + "]";
     }
-    
-    
+
 }

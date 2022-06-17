@@ -157,7 +157,8 @@ public class StudentsDaoImpl extends AbstractCrudDao<Students, Long> implements 
             ps.setLong(1, studentID);
             ps.setLong(2, courseID);
             if (ps.executeUpdate() != 1) {
-                throw new SQLException("Unable to delete student (id = " + studentID + ") from his course (id = " + courseID + ")");
+                throw new SQLException(
+                        "Unable to delete student (id = " + studentID + ") from his course (id = " + courseID + ")");
             }
         }
     }

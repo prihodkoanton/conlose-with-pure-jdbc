@@ -57,6 +57,7 @@ public class SchoolApp implements Closeable {
             throw new IOException(e);
         }
     }
+
     public static void main(String[] args) throws IOException, SQLException {
         String dbPropertiesFileName = args.length == 0 ? "db-docker.properties" : args[0];
         Properties databaseProperties = loadPropertiesFromResources(dbPropertiesFileName);

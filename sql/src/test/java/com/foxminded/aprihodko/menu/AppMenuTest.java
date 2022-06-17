@@ -38,7 +38,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AppMenuTest {
 
-    // printWriter -[writes]-> pipedOutputStream -[content for]-> pipedInputStream // input for console
+    // printWriter -[writes]-> pipedOutputStream -[content for]-> pipedInputStream
+    // // input for console
     PipedOutputStream pipedOutputStream = new PipedOutputStream();
     PipedInputStream pipedInputStream = new PipedInputStream();
 
@@ -199,7 +200,8 @@ class AppMenuTest {
             });
             thread.start();
             Instant finish = Instant.now().plus(2, ChronoUnit.SECONDS);
-            while (Instant.now().isBefore(finish)) ;
+            while (Instant.now().isBefore(finish))
+                ;
             thread.interrupt();
         } catch (Exception e) {
             // ignore

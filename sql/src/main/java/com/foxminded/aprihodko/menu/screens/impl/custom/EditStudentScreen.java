@@ -63,7 +63,8 @@ public class EditStudentScreen extends DynamicMenuScreen {
         try {
             List<Students> students = fromTransaction(datasource, studentDao::findAll);
             return students.stream()
-                    .map(student -> new NavigateAction(student.getFirstName() + " " + student.getLastName(), "editStudent_" + student.getId()))
+                    .map(student -> new NavigateAction(student.getFirstName() + " " + student.getLastName(),
+                            "editStudent_" + student.getId()))
                     .collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();

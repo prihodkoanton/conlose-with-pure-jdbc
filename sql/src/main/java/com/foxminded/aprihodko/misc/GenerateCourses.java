@@ -18,30 +18,12 @@ public class GenerateCourses {
         this.courseDao = courseDao;
     }
 
-    private final List<String> nameOfCourse = Arrays.asList(
-            "Math",
-            "Music",
-            "Dance",
-            "Chemistry",
-            "Physics",
-            "English",
-            "Belarussian",
-            "Ukrainian",
-            "Java",
-            "Spring"
-    );
-    private final List<String> descriptionOfCourse = Arrays.asList(
-            "simple mathematical operations",
-            "Learning the basics of music",
-            "Basics of movements",
-            "Chemical reactions of acids",
-            "Reactions in the interaction of two bodies",
-            "The use of tenses in speech",
-            "Cases in speech",
-            "Slava Ukraine",
-            "Learing Java core",
-            "Framework to Java"
-    );
+    private final List<String> nameOfCourse = Arrays.asList("Math", "Music", "Dance", "Chemistry", "Physics", "English",
+            "Belarussian", "Ukrainian", "Java", "Spring");
+    private final List<String> descriptionOfCourse = Arrays.asList("simple mathematical operations",
+            "Learning the basics of music", "Basics of movements", "Chemical reactions of acids",
+            "Reactions in the interaction of two bodies", "The use of tenses in speech", "Cases in speech",
+            "Slava Ukraine", "Learing Java core", "Framework to Java");
 
     public void generateDate(Connection connection, int courseCount) throws SQLException {
         if (courseCount > 10) {

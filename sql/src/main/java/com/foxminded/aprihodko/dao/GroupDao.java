@@ -9,5 +9,7 @@ import java.util.Optional;
 
 public interface GroupDao extends CrudDao<Group, Long> {
     Optional<Group> findByName(Connection connection, String name) throws SQLException;
-    List<Group> findAllGroupsWithLessOrEqualsStudentCount (Connection connection, int countOfStudents) throws SQLException;
+
+    List<Group> findAllGroupsWithLessOrEqualsStudentCount(Connection connection, int countOfStudents)
+            throws SQLException;
 }
