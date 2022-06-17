@@ -167,7 +167,7 @@ public class AppMenu {
             String countOfStudents = console.askForString("Enter count of students");
             List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAllGroupsWithLessOrEqualsStudentCount(connection, Integer.parseInt(countOfStudents)));
             AtomicInteger count = new AtomicInteger();
-            String result = groups.stream().map(group -> String.format("%2d) %s",count, group.getName())).collect(Collectors.joining("\n"));
+            String result = groups.stream().map(group -> String.format("%2d) %s", count.incrementAndGet(), group.getName())).collect(Collectors.joining("\n"));
             console.println(result);
             return "groups";
         } catch (Exception e) {
