@@ -1,7 +1,7 @@
 package com.foxminded.aprihodko.menu;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,7 +26,7 @@ import com.foxminded.aprihodko.model.Group;
 import com.foxminded.aprihodko.model.Students;
 
 import static com.foxminded.aprihodko.utils.TransactionUtils.fromTransaction;
-import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;;
+import static com.foxminded.aprihodko.utils.TransactionUtils.inTransaction;
 
 public class AppMenu {
     private final Console console;
@@ -132,18 +132,19 @@ public class AppMenu {
         try {
             List<Course> courses = fromTransaction(datasource, connection -> courseDao.findAll(connection));
             String courseName = console.askForString("Enter course name");
-            // Need TODO
-//            if (!courses.contains(courseName)) {
-//                throw new IllegalArgumentException("Course with '" + courseName + "' name does not exitst");
-//            }
-
+            List<String> coursesName = new ArrayList<>();
+            for (int i =0; i < courses.size(); i++) {
+                coursesName.add(courses.get(i).getName());
+            }
+            if (!coursesName.contains(courseName)) {
+                throw new IllegalArgumentException("The name is '" + courseName + "' does not exist");
+            }
             List<Students> students = fromTransaction(datasource,
                     connection -> studentsDao.findAllStudentRelatedToCourseWithGivenName(connection, courseName));
             AtomicInteger count = new AtomicInteger();
             String result = students.stream().map(student -> String.format("%2d) %s %s", count.incrementAndGet(),
                     student.getFirstName(), student.getLastName())).collect(Collectors.joining("\n"));
             console.println(result);
-            
             return "students";
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -166,7 +167,7 @@ public class AppMenu {
             String countOfStudents = console.askForString("Enter count of students");
             List<Group> groups = fromTransaction(datasource, connection -> groupDao.findAllGroupsWithLessOrEqualsStudentCount(connection, Integer.parseInt(countOfStudents)));
             AtomicInteger count = new AtomicInteger();
-            String result = groups.stream().map(group -> String.format("%2d) %s", count, group.getName())).collect(Collectors.joining("\n"));
+            String result = groups.stream().map(group -> String.format("%2d) %s",count, group.getName())).collect(Collectors.joining("\n"));
             console.println(result);
             return "groups";
         } catch (Exception e) {
